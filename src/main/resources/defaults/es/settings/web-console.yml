@@ -1,0 +1,30 @@
+# LosPerrisStatsAPI · Consola web (settings/web-console.yml)
+# Consola en vivo en el dashboard para administradores.
+# Se lee solo si modules.web-console: true en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#web-console
+
+# Líneas del registro que se guardan en memoria para quien abre la consola
+buffer-lines: 300
+# Conexiones simultáneas a la consola
+max-clients: 3
+# Límite de líneas por segundo enviadas al navegador (mínimo 5; el resto se resume en un aviso)
+max-lines-per-second: 60
+# Oculta direcciones IP en el registro
+hide-ips: true
+# Expresiones regulares cuyo texto se sustituye por *** (tokens, contraseñas...)
+redact:
+  - "(?i)(password|token|api-key|secret)\\S*\\s*[:=]\\s*\\S+"
+# Comandos permitidos, sin "/". Patrones: "list" (exacto), "say *" (con o sin argumentos),
+# "eco*" (comodín). Se ignora el prefijo "plugin:". Vacío = todos salvo los de deny.
+allow: []
+# Comandos SIEMPRE bloqueados (tienen prioridad sobre allow). Mismo formato que allow.
+deny:
+  - "stop"
+  - "restart"
+  - "reload *"
+  - "op *"
+  - "deop *"
+  - "lp *"
+  - "luckperms *"
+  - "pex *"
+  - "whitelist off"

@@ -1,0 +1,175 @@
+# LosPerrisStatsAPI · Milestones (settings/milestones.yml)
+# Messages, effects and rewards when a stat reaches a value.
+# Read only when modules.milestones: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#milestones
+
+# Seconds between checks of passive stats (e.g. play time)
+check-interval: 60
+
+# Cooldown in seconds between milestone notifications per player (0 = no cooldown)
+cooldown: 0
+
+# +----------------------------------------------------+
+# |                SOUNDS (GLOBAL)                     |
+# +----------------------------------------------------+
+sound:
+  enabled: true
+  effect: "ENTITY_PLAYER_LEVELUP"
+  # If true, ALL players hear the sound. If false, only the player who reached it.
+  broadcast: false
+
+# +----------------------------------------------------+
+# |                FIREWORKS (GLOBAL)                  |
+# +----------------------------------------------------+
+firework:
+  enabled: true
+
+# +----------------------------------------------------+
+# |                SCREEN TITLES                       |
+# +----------------------------------------------------+
+title:
+  enabled: true
+  main: "&6&lACHIEVEMENT UNLOCKED!"
+  fade-in: 10
+  stay: 70
+  fade-out: 20
+
+# +----------------------------------------------------+
+# |                PARTICLES (GLOBAL)                  |
+# +----------------------------------------------------+
+# Particle names: both the old ones (VILLAGER_HAPPY, TOTEM, BLOCK_CRACK, REDSTONE...)
+# and the 1.20.5+ ones (HAPPY_VILLAGER, TOTEM_OF_UNDYING, BLOCK, DUST...) work. The plugin converts them automatically.
+particles:
+  enabled: false
+  effect: "VILLAGER_HAPPY"
+  count: 30
+
+# +----------------------------------------------------+
+# |                ACTIONBAR (GLOBAL)                  |
+# +----------------------------------------------------+
+actionbar:
+  enabled: false
+  format: "&e✦ %message% ✦"
+
+# +----------------------------------------------------+
+# |      ACHIEVEMENTS GALLERY (was «achievements»)     |
+# +----------------------------------------------------+
+# "Achievements" page in the menu and the web: every milestone in the list is an achievement, with its
+# rarity (% of players who have it). Placeholders %losperrisapi_achievements_obtained|total|percent%.
+gallery:
+  enabled: true
+  # How often rarity is recalculated (minimum 30s)
+  update-interval: "5m"
+  # Thresholds in % of players: below each value it moves up a tier
+  tiers:
+    uncommon: 50
+    rare: 20
+    epic: 5
+    legendary: 1
+
+# ======================================================================
+#  LIST
+# ======================================================================
+
+# +----------------------------------------------------+
+# |                MILESTONE LIST                      |
+# +----------------------------------------------------+
+#
+# Full format, recommended for better grammar (option 3):
+# One message in 2nd person for the player and another in 3rd person for everyone else.
+#
+#   AMOUNT:
+#     message: "&aFirst steps! &fYou have killed 5 mobs."
+#     broadcast: "&a⚔ &f%player% &ahas killed 5 mobs."
+#
+# Quick format (option 1):
+# With a single message, everyone sees the same text. Write it in 3rd person:
+#
+#   AMOUNT: "&a%player% has killed 5 mobs!"
+#
+# You can add effects and rewards to either format:
+#     rewards:
+#       - "give %player% diamond 1"
+#     title: "&c&lACHIEVEMENT!"
+#     sound: "ENTITY_ENDER_DRAGON_GROWL"
+#     firework: true
+#     particles: "FLAME"
+#     actionbar: "&c✦ You did it! ✦"
+#
+stats:
+
+  # +--------------------------------+
+  # |       Mobs Killed              |
+  # +--------------------------------+
+  mob_kills:
+    100:
+      message: "&aCongratulations! You have wiped out 100 mobs."
+      broadcast: "&a%player% has wiped out 100 mobs!"
+    1000:
+      message: "&6You are an exterminator! 1000 mobs down."
+      broadcast: "&6%player% is an exterminator! 1000 mobs."
+      title: "&6&lEXTERMINATOR!"
+      sound: "ENTITY_ENDER_DRAGON_GROWL"
+      particles: "FLAME"
+      rewards:
+        - "give %player% diamond 1"
+        - "xp give %player% 500"
+
+  # +--------------------------------+
+  # |       Player Deaths            |
+  # +--------------------------------+
+  deaths:
+    10:
+      message: "&cHas muerto 10 veces... F."
+      broadcast: "&c%player% ha muerto 10 veces... F."
+    50:
+      message: "&4You need a doctor! 50 deaths."
+      broadcast: "&4%player% needs a doctor! 50 deaths."
+      firework: false
+
+  # +--------------------------------+
+  # |       Kills (PvP)              |
+  # +--------------------------------+
+  player_kills:
+    5:
+      message: "&eYou are on a roll! 5 kills."
+      broadcast: "&e%player% is on a roll! 5 kills."
+    10:
+      message: "&6You are unstoppable! 10 kills."
+      broadcast: "&6%player% is unstoppable! 10 kills."
+      title: "&c&lSERIAL KILLER!"
+      actionbar: "&c⚔ 10 KILLS ⚔"
+      rewards:
+        - "give %player% golden_apple 1"
+
+  # +--------------------------------+
+  # |         Hours Played           |
+  # +--------------------------------+
+  hours_played:
+    10:
+      message: "&bYou have played for 10 hours!"
+      broadcast: "&b%player% has played for 10 hours!"
+    100:
+      message: "&5INCREDIBLE! You have reached 100 hours."
+      broadcast: "&5INCREDIBLE! %player% has reached 100 hours."
+      title: "&5&lVETERAN!"
+      sound: "UI_TOAST_CHALLENGE_COMPLETE"
+      particles: "TOTEM"
+      rewards:
+        - "eco give %player% 10000"
+        - "give %player% diamond_block 1"
+
+  # +--------------------------------+
+  # |       Blocks Broken            |
+  # +--------------------------------+
+  blocks_broken:
+    1000:
+      message: "&bYou have broken 1000 blocks! Good job."
+      broadcast: "&b%player% has broken 1000 blocks!"
+    10000:
+      message: "&5LEGENDARY MINER! 10,000 blocks broken."
+      broadcast: "&5%player% is a LEGENDARY MINER! 10,000 blocks."
+      title: "&b&lLEGENDARY MINER!"
+      particles: "BLOCK_CRACK"
+      rewards:
+        - "give %player% diamond_pickaxe 1"

@@ -1,0 +1,40 @@
+# LosPerrisStatsAPI · Base de datos (settings/database.yml)
+# Dónde se guardan las estadísticas: archivos locales (por defecto), MySQL o Supabase/PostgreSQL.
+# Si la conexión falla, se usan archivos locales hasta que lo corrija y ejecute /lpa reload.
+# Guía: {{DOCS_URL}}/es/GUIA.md#base-de-datos
+
+# false = archivos locales en data/ (no necesita nada más)
+enabled: false
+# mysql o supabase
+driver: "mysql"
+
+# Datos de MySQL (solo si driver: "mysql")
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "minecraft_stats"
+  username: "root"
+  password: "password123"
+  # Solo letras, números y "_"
+  table_prefix: "stats_"
+  # Cifrar la conexión (recomendado si la base de datos está en otra máquina)
+  use_ssl: false
+
+# Supabase/PostgreSQL: quite los # si usa driver: "supabase".
+# En supabase.com → su proyecto → Connect → "Transaction pooler" (puerto 6543), no "Direct connection".
+# postgres:
+#   host: "aws-0-us-east-1.pooler.supabase.com"
+#   port: 6543
+#   database: "postgres"
+#   username: "postgres.xxxxxxxxxxxxxxxx"
+#   password: "su-contraseña"
+#   table_prefix: "stats_"
+
+# Conexiones (MySQL y PostgreSQL)
+pool:
+  # Máximo de conexiones a la vez (suba si tiene muchos jugadores)
+  max_connections: 10
+  # Conexiones que se mantienen abiertas en reposo
+  min_idle: 2
+  # Milisegundos de espera para obtener una conexión (5000 = 5 s)
+  timeout: 5000

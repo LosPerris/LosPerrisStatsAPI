@@ -1,0 +1,9 @@
+# LosPerrisStatsAPI · Activity heatmap (settings/heatmap.yml)
+# Activity heatmap (day x hour) in the dashboard.
+# Read only when modules.heatmap: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#heatmap
+
+# Weeks to average (1-52)
+weeks: 8
+# How often online players are counted
+sample-every: "5m"

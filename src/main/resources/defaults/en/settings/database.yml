@@ -1,0 +1,40 @@
+# LosPerrisStatsAPI · Database (settings/database.yml)
+# Where stats are stored: local files (default), MySQL or Supabase/PostgreSQL.
+# If the connection fails, local files are used until you fix it and run /lpa reload.
+# Guide: {{DOCS_URL}}/en/GUIDE.md#database
+
+# false = local files in data/ (nothing else needed)
+enabled: false
+# mysql or supabase
+driver: "mysql"
+
+# MySQL details (only when driver: "mysql")
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "minecraft_stats"
+  username: "root"
+  password: "password123"
+  # Letters, numbers and "_" only
+  table_prefix: "stats_"
+  # Encrypt the connection (recommended if the database is on another machine)
+  use_ssl: false
+
+# Supabase/PostgreSQL: remove the # if you use driver: "supabase".
+# On supabase.com → your project → Connect → "Transaction pooler" (port 6543), not "Direct connection".
+# postgres:
+#   host: "aws-0-us-east-1.pooler.supabase.com"
+#   port: 6543
+#   database: "postgres"
+#   username: "postgres.xxxxxxxxxxxxxxxx"
+#   password: "your-password"
+#   table_prefix: "stats_"
+
+# Connections (MySQL and PostgreSQL)
+pool:
+  # Maximum connections at once (raise it with many players)
+  max_connections: 10
+  # Connections kept open while idle
+  min_idle: 2
+  # Milliseconds to wait for a connection (5000 = 5 s)
+  timeout: 5000

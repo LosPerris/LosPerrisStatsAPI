@@ -1,0 +1,9 @@
+# LosPerrisStatsAPI · Mapa de actividad (settings/heatmap.yml)
+# Mapa de calor de actividad (día x hora) en el dashboard.
+# Se lee solo si modules.heatmap: true en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#heatmap
+
+# Semanas que se promedian (1-52)
+weeks: 8
+# Cada cuánto se cuentan los jugadores conectados
+sample-every: "5m"

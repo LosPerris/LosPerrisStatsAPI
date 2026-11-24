@@ -1,0 +1,480 @@
+# ─────────────────────────────────────────────────────────────
+#  LosPerrisStatsAPI · English messages
+#  Colors with & (&a, &c, &l...). An empty message ('') is not sent.
+#  Valid {variables}: see the guide (link at the top of config.yml) or /lpa help
+#  (unknown variables are reported in the console on load).
+# ─────────────────────────────────────────────────────────────
+
+general:
+  no-permission: "&cYou don't have permission to do that."
+  players-only: "&cOnly players can use this command."
+  usage: "&cUsage: &f{usage}"
+  player-offline: "&cPlayer &f{player} &cwas not found or is offline."
+
+help:
+  title: "&8━━━━━ &bLosPerrisStatsAPI &7v{version} &8━━━━━"
+  admin-title: "&8━━━━━ &cAdministration &7v{version} &8━━━━━"
+  hint: "&8 Hover a command for details; click to type it."
+  category: "&6▸ {category}"
+  line: "&f  {usage} &8· &7{description}"
+  hover: "&e{usage}\n&f{description}\n&7Permission: &e{permission}\n&8Click to type it in chat"
+  everyone: "everyone"
+  admin-link: "&6▸ Administration &8→ &e/lpa help admin"
+  admin-link-hover: "&7See the admin commands you can use\n&8Click to open"
+  detail: "&8 Module details: &7/lpa help <module>"
+  footer: "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  none: "&7 There are no commands available to you."
+  none-admin: "&7 You have no admin permissions."
+  unknown-topic: "&cThere is no module «{module}». Use &f/lpa modules&c to see the list."
+  module-title: "&8━━ &b{description} &8({module}) &8━━"
+  module-desc: "&7{description}"
+  module-off: "&8 (The module is off: its commands are not available right now.)"
+  no-commands: "&7 There are no commands from this module you can use."
+  module-file: "&7 Settings: &f{file}"
+  # One entry per action: usage (shown), desc (summary), info (on hover)
+  cmd:
+    top:
+      usage: "/lpa top <type>"
+      desc: "Top 10 of a statistic"
+      info: "Shows the 10 best players in a statistic (kills, deaths, playtime...)."
+    menu:
+      usage: "/lpa menu"
+      desc: "Your stats in a menu"
+      info: "Opens a menu with all your statistics."
+    sb:
+      usage: "/lpa sb"
+      desc: "Show or hide the scoreboard"
+      info: "Turns the sidebar scoreboard on or off just for you."
+    period:
+      usage: "/lpa period [weekly|monthly]"
+      desc: "Weekly and monthly tops"
+      info: "Shows the ranking of the current week or month."
+    discord:
+      usage: "/lpa discord [status]"
+      desc: "Link your Discord account"
+      info: "link gives you a code to type on Discord; unlink removes the link."
+    lang:
+      usage: "/lpa lang [es|en|auto]"
+      desc: "Show or change your language"
+      info: "auto uses your Minecraft client language."
+    version:
+      usage: "/lpa version"
+      desc: "Plugin version"
+      info: "Installed version and authors."
+    reset:
+      usage: "/lpa reset <player>"
+      desc: "Reset statistics"
+      info: "Sets all of a player's statistics to zero. Cannot be undone."
+    view:
+      usage: "/lpa view <player>"
+      desc: "View another player's stats"
+      info: "Opens another player's stats menu (read only)."
+    admin:
+      usage: "/lpa admin <player>"
+      desc: "Edit statistics"
+      info: "Opens a player's statistics editor."
+    period-end:
+      usage: "/lpa period end <weekly|monthly>"
+      desc: "Close a period now"
+      info: "Closes the week or month now: announces winners, gives rewards and starts over."
+    backup:
+      usage: "/lpa backup [now|list]"
+      desc: "Backups"
+      info: "now creates a backup now; list shows the existing ones."
+    modules:
+      usage: "/lpa modules [module]"
+      desc: "Module status"
+      info: "Lists modules by category; with an id shows its details."
+    modules-toggle:
+      usage: "/lpa modules enable|disable <module>"
+      desc: "Enable or disable a module"
+      info: "Saves the change in config.yml and applies it right away, no restart."
+    reload:
+      usage: "/lpa reload"
+      desc: "Reload everything"
+      info: "Re-reads configuration, languages and modules."
+    timings:
+      usage: "/lpa timings [reset]"
+      desc: "Task timings"
+      info: "Average and maximum of each plugin task, to hunt lag."
+
+commands:
+  unknown: "&cUnknown command. Use &f/lpa help&c."
+  help:
+    usage: "/lpa help"
+  version:
+    usage: "/lpa version"
+    version: "&7Version: &b{version}"
+    authors: "&7Authors: &f{authors}"
+    addon: "&7Addon: &f{module} &7v&b{version}"
+  reload:
+    usage: "/lpa reload"
+    failed: "&cReload aborted: config.yml could not be migrated safely. Check the console; nothing was changed."
+    done: "&aConfig and modules reloaded in &f{value} ms&a."
+  lang:
+    usage: "/lpa lang [es|en|auto]"
+    current: "&7Current language: &b{language} &8(available: &f{languages}&8)"
+    changed: "&aLanguage changed to &f{language}&a."
+    unknown: "&cLanguage not available. Options: &f{languages}&c, auto."
+  modules:
+    usage: "/lpa modules [module] | enable|disable <module>"
+    usage-toggle: "/lpa modules enable|disable <module>"
+    header: "&7Modules &8(&a{count} on &8/ &f{total}&8)"
+    category: "&6 {category}: "
+    separator: "&8, "
+    "on": "&a● {module}"
+    "off": "&8○ {module}"
+    broken: "&e⚠ {module}"
+    hover: "&b{module}\n&f{description}\n{value}\n&8Click for details"
+    broken-line: "&e ⚠ {module}: &7{reason}"
+    hint: "&8 Click a module for details. &a● &8on · &8○ off · &e⚠ &8has problems"
+    hint-console: "&8 Details: /lpa modules <module> · ● on · ○ off · ⚠ has problems"
+    unknown: "&cUnknown module: &f{module}&c. Use &f/lpa modules&c."
+    status:
+      "on": "&aOn"
+      "off": "&8Off in config.yml"
+      broken: "&eEnabled, but not working: &7{reason}"
+    detail:
+      title: "&8━━ &b{description} &8({module}) &8━━"
+      status: "&7 Status: {value}"
+      desc: "&7 {description}"
+      category: "&7 Category: &f{category}"
+      file: "&7 Settings: &f{file}"
+      no-file: "&7 Settings: &8no settings of its own"
+      commands: "&7 Commands: &f{value}"
+      no-commands: "&7 Commands: &8none"
+      permissions: "&7 Permissions: &e{permission}"
+      requires: "&7 Requires: &f{value}"
+      dependencies: "&7 Depends on: &f{modules}"
+      guide: "&7 Guide: &f{url}/en/GUIDE.md#{module}"
+      enable-button: "&a[Enable]"
+      disable-button: "&c[Disable]"
+      toggle-hover: "&7Saves the change in config.yml and applies it now\n&8{command}"
+      toggle-console: "&7 Toggle: &f{command}"
+    toggle:
+      enabled: "&aModule &f{module} &aenabled and saved in config.yml."
+      disabled: "&cModule &f{module} &cdisabled and saved in config.yml."
+      already-on: "&7Module &f{module} &7is already on."
+      already-off: "&7Module &f{module} &7is already off."
+      needs: "&cCannot enable &f{module}&c: enable &f{modules} &cfirst."
+      failed: "&cModule &f{module} &cis enabled in config.yml but did not start: &7{reason}&c. Check the console."
+      warning: "&e⚠ {module}: &7{reason}"
+      also-disabled: "&7Also turned off (they depend on it): &f{modules}"
+      also-enabled: "&7Also turned on: &f{modules}"
+      write-failed: "&cCould not save config.yml: &7{reason}&c. Nothing was changed."
+    reason:
+      needs: "needs module {module}"
+      error: "failed to start: {reason}"
+      unknown: "did not start (see the console)"
+      no-papi: "PlaceholderAPI missing"
+      no-token: "no bot token (settings/discord.yml → discord-bot.token)"
+      no-webhook: "no valid webhook-url (settings/discord.yml → discord-webhook.webhook-url)"
+  timings:
+    usage: "/lpa timings [reset]"
+    header: "&7Task &8| &7avg &8| &7max &8| &7runs"
+    line: "&f {task} &8| &a{avg} ms &8| &e{max} ms &8| &7{runs}"
+    line-async: "&f {task} &8(async) | &a{avg} ms &8| &e{max} ms &8| &7{runs}"
+    reset: "&aTimings reset."
+  top:
+    usage: "/lpa top <type>"
+  reset:
+    usage: "/lpa reset <player>"
+  sb:
+    usage: "/lpa sb"
+  menu:
+    usage: "/lpa menu"
+  view:
+    usage: "/lpa view <player>"
+  admin:
+    usage: "/lpa admin <player>"
+  period:
+    usage: "/lpa period [weekly|monthly] | end <weekly|monthly>"
+  backup:
+    usage: "/lpa backup [now|list]"
+  discord:
+    usage: "/lpa discord [status]"
+
+stats:
+  names:
+    player_kills: "Kills (PvP)"
+    deaths: "Deaths"
+    mob_kills: "Mob kills"
+    hours_played: "Playtime"
+    blocks_broken: "Blocks broken"
+    jumps: "Jumps"
+    distance_walked: "Distance walked"
+    blocks_placed: "Blocks placed"
+    ores_mined: "Ores mined"
+    fish_caught: "Fish caught"
+    villager_trades: "Villager trades"
+    damage_dealt: "Damage dealt"
+    damage_taken: "Damage taken"
+  activity:
+    24h: "Last 24 h"
+    7d: "Last 7 days"
+    30d: "Last 30 days"
+    older: "Older"
+  top:
+    invalid: "&cInvalid category. Use: kills, deaths, time, mob_kills, blocks_broken, blocks_placed, ores_mined, jumps, distance_walked, fish_caught, trades, damage_dealt, damage_taken"
+    empty: "&cNo data for that category yet."
+    header: "&6&lTOP 10 {stat}"
+    line: "&e#{position} &7{player} &8- &f{value}"
+  reset:
+    done: "&aStats of {player} have been reset."
+    not-found: "&cNo data found for {player}."
+
+scoreboard:
+  "on": "&aScoreboard enabled."
+  "off": "&cScoreboard disabled."
+  failed: "&cCould not enable the scoreboard (check that it is enabled in the config)."
+
+milestones:
+  money-received: "&a+{amount} &7received for the achievement."
+
+periods:
+  names:
+    weekly: "weekly"
+    monthly: "monthly"
+  ended:
+    header: "&6&l🏆 The {period} top has ended! &7Winners:"
+    stat: "&e{stat}:"
+    line: "  &7#{position} &f{player} &8» &a+{value}"
+    empty: "&7Nobody scored points this period."
+  ended-forced: "&aThe {period} top was closed and a new one started."
+  ending: "&7Closing the {period} top..."
+  usage: "&cUsage: &f/lpa period [weekly|monthly] &7or &f/lpa period end <weekly|monthly>"
+  show:
+    header: "&6&l{period} top &7(ends in &f{time}&7)"
+    line: "&e{stat}: &f{player}"
+    you: " &8| &7you: &a#{position} &7(+{value})"
+  time:
+    dh: "{days}d {hours}h"
+    hm: "{hours}h {minutes}m"
+
+gui:
+  stats:
+    title: "{player}'s stats"
+  admin:
+    title: "Edit: {player}"
+    offline: "&cThat player is no longer online."
+    lore:
+      - "&7Current value: &f{value}"
+      - ""
+      - "&aLeft click: &f+1"
+      - "&cRight click: &f-1"
+      - "&aShift+Click: &f+10"
+      - "&cShift+Right: &f-10"
+  items:
+    player_kills: "&c&lKills (PvP)"
+    deaths: "&4&lDeaths"
+    mob_kills: "&2&lMob kills"
+    hours_played: "&e&lPlaytime"
+    blocks_broken: "&b&lBlocks broken"
+    jumps: "&f&lJumps"
+    distance_walked: "&a&lDistance walked"
+    blocks_placed: "&6&lBlocks placed"
+    ores_mined: "&b&lOres mined"
+    fish_caught: "&3&lFish caught"
+    villager_trades: "&a&lVillager trades"
+    damage_dealt: "&c&lDamage dealt"
+    damage_taken: "&7&lDamage taken"
+    kdr: "&6&lKDR"
+  lore:
+    total: "&7Total: &f{value}"
+    kdr: "&7KDR: &f{value}"
+    rank: "&7Rank: &e#{rank}"
+    weekly: "&7This week: &a+{value}"
+  head:
+    name: "&e&l{player}"
+  nav:
+    click: "&8Click to open"
+    ores: "&b&lOres"
+    deaths: "&4&lDeath causes"
+    achievements: "&d&lAchievements"
+    periods: "&6&lWeekly/monthly tops"
+    close: "&c&lClose"
+    back: "&7&l« Back"
+    previous: "&7&l« Previous"
+    next: "&7&lNext »"
+  page: "&7Page {page}"
+  ores:
+    title: "{player}'s ores"
+    coal: "&8&lCoal"
+    iron: "&f&lIron"
+    copper: "&6&lCopper"
+    gold: "&e&lGold"
+    redstone: "&c&lRedstone"
+    lapis: "&9&lLapis lazuli"
+    diamond: "&b&lDiamond"
+    emerald: "&a&lEmerald"
+    quartz: "&f&lQuartz"
+    ancient_debris: "&4&lAncient debris"
+  deaths:
+    title: "{player}'s deaths"
+    player: "&c&lPlayers"
+    mob: "&2&lMobs"
+    fall: "&f&lFalling"
+    lava: "&6&lLava"
+    fire: "&6&lFire"
+    drowning: "&9&lDrowning"
+    explosion: "&c&lExplosions"
+    void: "&5&lVoid"
+    suffocation: "&7&lSuffocation"
+    starvation: "&e&lStarvation"
+    magic: "&d&lMagic/poison"
+    freeze: "&b&lFreezing"
+    contact: "&a&lCactus/berries"
+    lightning: "&e&lLightning"
+    other: "&7&lOther"
+  achievements:
+    title: "{player}'s achievements"
+    summary: "&d&lAchievements: &f{obtained}/{total}"
+    name: "&f&l{stat}: {value}"
+    rarity: "&7Rarity: {tier} &8({rarity}% of players)"
+    obtained: "&a✔ Unlocked"
+    locked: "&c✘ Locked"
+    empty: "&7No achievements configured."
+    tiers:
+      common: "&fCommon"
+      uncommon: "&aUncommon"
+      rare: "&9Rare"
+      epic: "&5Epic"
+      legendary: "&6Legendary"
+  periods:
+    title: "{player}'s tops"
+    header: "&6&l{period} top"
+    ends: "&7Ends in: &f{time}"
+    points: "&7Points: &a+{value}"
+
+web:
+  events:
+    join: "joined the server"
+    quit: "left the server"
+
+
+
+backups:
+  started: "&7Creating backup..."
+  running: "&eA backup is already running."
+  done: "&aBackup created: &f{value} &8({size})"
+  failed: "&cCould not create the backup: &f{value}"
+  list-header: "&7Backups &8({count})&7:"
+  list-line: "&f {value} &8({size})"
+
+updates:
+  available: "&eA new version is available: &f{value} &7(you have {version})&e. &f{url}"
+
+
+
+
+
+
+
+
+discordbot:
+  status: "&7Discord: &f{value} mode &8| &7state: &f{title}"
+  no-token: "no token"
+  offline: "&cThe Discord bot is not connected right now."
+  bridge:
+    join: "**{player}** joined the server"
+    quit: "**{player}** left the server"
+    started: "Server started"
+    stopped: "Server stopped"
+  unknown-command: "Unknown command."
+  error: "Something went wrong. Try again in a moment."
+  no-player: "Player {player} was not found."
+  stats-need-player: "Provide a player name: /stats <player>"
+  stats-title: "{player}'s statistics"
+  top-title: "Top {stat}"
+  top-line: "`#{position}` {player} — **{value}**"
+  online-title: "Online: {number}/{value}"
+  online-empty: "Nobody is online."
+  panel:
+    no-channel: "Pick a channel: /panel channel:#status (or set panel.default-channel-id)."
+    posted: "Panel posted. It will auto-refresh on refresh-interval."
+    failed: "Could not post the panel (HTTP {value})."
+    tops-title: "Server tops"
+    field:
+      players: "Players"
+      registered: "Registered"
+      tps: "TPS"
+      ip: "IP"
+      version: "Version"
+      uptime: "Uptime"
+      online-now: "Online now"
+    btn:
+      refresh: "Refresh"
+      online: "Online"
+      tops: "Tops"
+      info: "Info"
+  staff:
+    no-permission: "You don't have a staff role to use this command."
+    blocked: "Command not allowed ({value})."
+    done: "Executed: {value}"
+    failed: "Failed: {value}"
+  slash:
+    stats: "View a player's statistics"
+    player: "Player name"
+    top: "View a statistic leaderboard"
+    amount: "How many places to show (3-15)"
+    stat: "Statistic"
+    online: "See who is online"
+    panel: "Post the server status panel"
+    channel: "Channel for the panel"
+    staff: "Run a console command (staff only)"
+    command: "Command without the slash"
+
+module-info:
+  category:
+    core: "Core"
+    extra-web: "Web"
+    extra-server: "Server and data"
+    general: "General"
+  stats:
+    name: "Statistics"
+    desc: "Tracks every player's statistics and builds the leaderboards."
+  afk:
+    name: "AFK"
+    desc: "Detects AFK players; while AFK they earn no milestones or rewards."
+  milestones:
+    name: "Milestones"
+    desc: "Messages, effects and rewards when a statistic reaches a value; with an achievements gallery and rarity."
+  periods:
+    name: "Weekly and monthly tops"
+    desc: "Weekly and monthly rankings with winner announcements and rewards."
+  scoreboard:
+    name: "Scoreboard"
+    desc: "Sidebar scoreboard with statistics and tops."
+  gui:
+    name: "Menus"
+    desc: "Inventory menus: your stats, other players' stats and the admin editor."
+  placeholders:
+    name: "PlaceholderAPI"
+    desc: "%losperrisapi_...% placeholders for other plugins (needs PlaceholderAPI)."
+  web:
+    name: "Web"
+    desc: "HTTP API and web dashboard."
+  public-page:
+    name: "Public page"
+    desc: "Read-only public page and API, no api-key needed."
+  web-console:
+    name: "Web console"
+    desc: "Live console in the dashboard for administrators."
+  heatmap:
+    name: "Activity heatmap"
+    desc: "Activity heatmap (day x hour) in the dashboard."
+  history:
+    name: "History"
+    desc: "Daily snapshot of each player's statistics (progress charts)."
+  backups:
+    name: "Backups"
+    desc: "Automatic data backups."
+  updates:
+    name: "Updates"
+    desc: "Notifies when a new version is available."
+  discord-webhook:
+    name: "Discord webhook"
+    desc: "Milestone and winner notices to Discord through a webhook."
+  discord-bot:
+    name: "Discord bot"
+    desc: "Two-way bot: /stats, /top, /online, chat, account linking and roles."

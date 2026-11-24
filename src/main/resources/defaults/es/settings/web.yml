@@ -1,0 +1,54 @@
+# LosPerrisStatsAPI · Web (settings/web.yml)
+# API HTTP y dashboard web.
+# Se lee solo si modules.web: true en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#web
+
+# Puerto donde se escuchará la API Web (http://IP:Puerto)
+# Revisa {{DOCS_URL}}/es/API_REFERENCE.md  para más información
+port: 25908
+
+# Ajustes del servidor web
+
+# IP en la que escucha la API. "0.0.0.0" = todas las interfaces.
+# Use "127.0.0.1" si solo la consulta un proxy/web en la misma máquina.
+bind-address: "0.0.0.0"
+
+# Hilos para atender peticiones HTTP (mínimo 2). El chat en vivo ya no ocupa hilos.
+threads: 8
+
+# Máximo de pestañas/conexiones simultáneas al chat en vivo (/api/chat/stream)
+max-chat-clients: 20
+
+# Cada cuántos minutos se guarda una muestra del historial (online, TPS, totales) para las
+# gráficas del dashboard. Se guarda en data/history.json. Mínimo 1.
+history-interval-minutes: 5
+
+# Número máximo de muestras que se conservan (288 x 5 min = 24 horas)
+history-max-points: 288
+
+# Permite las acciones de administración desde el dashboard (/api/admin/...): editar/resetear
+# estadísticas, recargar, guardar, anunciar. Requieren security.enabled: true y la api-key
+# enviada SOLO en el header "Authorization: Bearer <key>" (nunca ?key=).
+admin-enabled: true
+
+# Si es true, las respuestas de /api/admin incluyen Access-Control-Allow-Origin (cors-origin).
+# Déjelo en false salvo que administre desde otra web distinta al dashboard integrado.
+admin-allow-cors: false
+
+# Guarda cada acción de administración (web y consola web) en logs/web-audit.log
+audit-log: true
+
+security:
+  # Activa o desactiva la seguridad de la API (recomendado: true)
+  enabled: true
+  # La clave secreta para acceder a la API.
+  # Si se deja vacía, el plugin genera una aleatoria al arrancar, la guarda aquí y la muestra en consola.
+  # Envíela con el header "Authorization: Bearer <key>".
+  api-key: ""
+  # Permite también enviar la key como ?key=... en la URL (solo para lectura; nunca para /api/admin).
+  # El dashboard integrado ya no la necesita (el chat en vivo envía el header). Póngalo en false
+  # si ninguna web externa suya usa ?key=.
+  allow-query-key: true
+  # Valor del header Access-Control-Allow-Origin. "*" = cualquier web puede consultar la API (con la key).
+  # Ejemplo para restringir: "https://losperris.site"
+  cors-origin: "*"

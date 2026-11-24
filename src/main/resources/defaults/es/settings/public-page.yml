@@ -1,0 +1,23 @@
+# LosPerrisStatsAPI · Página pública (settings/public-page.yml)
+# Página y API públicas de solo lectura, sin api-key.
+# Se lee solo si modules.public-page: true en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#public-page
+
+# Título que se muestra en la página pública (vacío = nombre del plugin)
+title: ""
+# Peticiones por minuto y por IP (0 = sin límite)
+rate-limit: 60
+# Access-Control-Allow-Origin de la API pública
+cors-origin: "*"
+# Secciones visibles
+sections:
+  summary: true
+  leaderboards: true
+  players: true
+  profiles: true
+  periods: true
+  achievements: true
+  history: true
+  seasons: true
+  events: true
+  titles: true

@@ -1,0 +1,42 @@
+# LosPerrisStatsAPI · Scoreboard (settings/scoreboard.yml)
+# Sidebar scoreboard with stats and tops.
+# Read only when modules.scoreboard: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#scoreboard
+
+# Available variables (full list in {{DOCS_URL}}/en/variables/scoreboard.md):
+#   %player_name% %kills% %deaths% %mob_kills% %time% %blocks_broken% %jumps% %distance_walked%
+#   %top_<type>_<pos>_name% / %top_<type>_<pos>_value%  (e.g. %top_kills_1_name%, positions 1-100)
+#   Types: kills, deaths, mob_kills, time, blocks_broken, blocks_placed, ores_mined, jumps,
+#          distance_walked, fish_caught, trades, damage_dealt, damage_taken
+#   Period tops: %weekly_kills_1_name% %monthly_time_1_value% %weekly_kills% (the player's own)
+# Unknown variables are reported in the console when loading.
+
+show-on-join: true # If false, players must use /lpa sb to see it
+
+title: "&e&lLOSPERRIS"
+
+update-interval: 20 # Ticks (20 = 1 second). Minimum 1.
+
+lines:
+  - "&7----------------"
+  - "&f» &bPlayer:"
+  - "   %player_name%"
+  - "&f⚔ &cKills:"
+  - "   %kills%"
+  - "&f☠ &7Deaths:"
+  - "   %deaths%"
+  - "&f⌚ &aTime:"
+  - "   %time%"
+  - "&7----------------"
+
+# Lines shown WHILE an event is running (events module). Empty = always 'lines'.
+event-lines:
+  - "&7----------------"
+  - "&6★ &e%event_name%"
+  - "&fTime left: &a%event_time%"
+  - "&fYour rank: &b#%event_rank%"
+  - "&fYour score: &b%event_score%"
+  - "&f1. &e%event_1_name% &7%event_1_value%"
+  - "&f2. &e%event_2_name% &7%event_2_value%"
+  - "&f3. &e%event_3_name% &7%event_3_value%"
+  - "&7----------------"

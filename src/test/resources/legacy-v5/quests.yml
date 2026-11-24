@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────────────────────
+#  LosPerrisStatsAPI · Misiones diarias y semanales / Daily and weekly quests
+#  Se activa con modules.quests.enabled: true en config.yml.
+#  Enable with modules.quests.enabled: true in config.yml.
+#
+#  objective:
+#    stat:<estadística>          lo que suba la estadística en el periodo (mob_kills, time, jumps, distance...)
+#    event:<tipo>[:<filtro>]     break, place, kill, craft, consume (filtro = MATERIAL/ENTIDAD), fish, enchant, chat
+#  amount: objetivo (horas para time, km para distance, corazones para damage)
+#  rewards: "money:500", "item:DIAMOND:3", "command:give %player% emerald 2"  (docs/es/variables/rewards.md)
+#  name / description: texto o {es: "...", en: "..."}. Sin description se genera desde el objetivo ({goal} = cantidad).
+#  Los reinicios usan timezone y periods.week-start de config.yml.
+# ─────────────────────────────────────────────────────────────
+
+settings:
+  # Misiones activas por periodo, elegidas al azar (iguales para todo el servidor). 0 = todas.
+  daily-count: 3
+  weekly-count: 2
+  # Cada cuántos segundos se revisan los objetivos de estadística
+  update-seconds: 10
+  # Anunciar en el chat cuando alguien completa una misión
+  broadcast: false
+  # Aviso emergente en el dashboard web
+  web-toast: true
+
+daily:
+  hunter:
+    name: {es: "Cazador", en: "Hunter"}
+    objective: "stat:mob_kills"
+    amount: 25
+    rewards: ["money:250"]
+    icon: IRON_SWORD
+  miner:
+    name: {es: "Minero", en: "Miner"}
+    objective: "event:break"
+    amount: 300
+    rewards: ["money:150", "item:BREAD:8"]
+    icon: IRON_PICKAXE
+  diamonds:
+    name: {es: "Brillo azul", en: "Blue shine"}
+    objective: "event:break:DIAMOND_ORE"
+    amount: 3
+    rewards: ["item:DIAMOND:2"]
+    icon: DIAMOND
+  builder:
+    name: {es: "Constructor", en: "Builder"}
+    objective: "event:place"
+    amount: 200
+    rewards: ["money:150"]
+  walker:
+    name: {es: "Explorador", en: "Explorer"}
+    objective: "stat:distance"
+    amount: 2
+    rewards: ["money:200"]
+    icon: LEATHER_BOOTS
+  zombies:
+    name: {es: "Plaga zombi", en: "Zombie plague"}
+    objective: "event:kill:ZOMBIE"
+    amount: 15
+    rewards: ["money:200"]
+    icon: ZOMBIE_HEAD
+  angler:
+    name: {es: "Pescador", en: "Angler"}
+    objective: "event:fish"
+    amount: 5
+    rewards: ["item:COOKED_COD:5"]
+  social:
+    name: {es: "Sociable", en: "Social"}
+    description: {es: "Envía {goal} mensajes en el chat", en: "Send {goal} chat messages"}
+    objective: "event:chat"
+    amount: 10
+    rewards: ["money:50"]
+
+weekly:
+  veteran:
+    name: {es: "Veterano", en: "Veteran"}
+    objective: "stat:time"
+    amount: 10
+    rewards: ["money:2000"]
+    icon: CLOCK
+  slayer:
+    name: {es: "Exterminador", en: "Slayer"}
+    objective: "stat:mob_kills"
+    amount: 300
+    rewards: ["money:1500", "item:GOLDEN_APPLE:2"]
+  enchanter:
+    name: {es: "Encantador", en: "Enchanter"}
+    objective: "event:enchant"
+    amount: 5
+    rewards: ["item:LAPIS_LAZULI:32"]
+  baker:
+    name: {es: "Panadero", en: "Baker"}
+    objective: "event:craft:BREAD"
+    amount: 64
+    rewards: ["money:500"]

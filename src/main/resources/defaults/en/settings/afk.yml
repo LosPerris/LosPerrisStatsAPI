@@ -1,0 +1,7 @@
+# LosPerrisStatsAPI · AFK (settings/afk.yml)
+# Detects AFK players; while AFK they earn no milestones or rewards.
+# Read only when modules.afk: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#afk
+
+# Time without activity before a player counts as AFK
+timeout: "5m"

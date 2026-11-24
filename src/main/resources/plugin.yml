@@ -1,0 +1,65 @@
+name: LosPerrisStatsAPI
+version: ${project.version}
+main: me.gordi.mineapi.MineAPI
+api-version: 1.20
+description: Una API HTTP simple para tu servidor de Minecraft
+authors: [ponss]
+website: https://losperris.site
+softdepend: [Vault, PlaceholderAPI, Essentials, DiscordSRV]
+commands:
+  losperrisapi:
+    description: Comandos principales del plugin
+    aliases: [lpa]
+
+# Todos los permisos de administración son hijos de losperris.admin (por defecto: OP).
+# Puede dar uno suelto (p. ej. losperris.periods.admin) a un rango de staff.
+# El addon LosPerrisExtras añade los suyos como hijos de losperris.admin.
+# All admin permissions are children of losperris.admin (default: OP).
+permissions:
+  losperris.admin:
+    description: Todos los permisos de administración / Every admin permission
+    default: op
+    children:
+      losperris.reload: true
+      losperris.modules: true
+      losperris.modules.toggle: true
+      losperris.timings: true
+      losperris.stats.reset: true
+      losperris.inspect: true
+      losperris.gui.admin: true
+      losperris.periods.admin: true
+      losperris.backups.admin: true
+      losperris.updates.notify: true
+  losperris.reload:
+    description: /lpa reload
+    default: op
+  losperris.modules:
+    description: /lpa modules (ver estado / view status)
+    default: op
+  losperris.modules.toggle:
+    description: /lpa modules enable|disable (cambia config.yml / edits config.yml)
+    default: op
+  losperris.timings:
+    description: /lpa timings
+    default: op
+  losperris.stats.reset:
+    description: /lpa reset <jugador|player>
+    default: op
+  losperris.inspect:
+    description: Ver las estadísticas de otros / View other players' stats
+    default: op
+  losperris.gui.admin:
+    description: /lpa admin <jugador|player> (editar estadísticas / edit stats)
+    default: op
+  losperris.periods.admin:
+    description: /lpa period end
+    default: op
+  losperris.backups.admin:
+    description: /lpa backup
+    default: op
+  losperris.updates.notify:
+    description: Aviso de nueva versión al entrar / New version notice on join
+    default: op
+  losperris.scoreboard:
+    description: /lpa sb (mostrar u ocultar el scoreboard / show or hide the scoreboard)
+    default: true

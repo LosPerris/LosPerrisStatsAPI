@@ -1,0 +1,54 @@
+# LosPerrisStatsAPI · Web (settings/web.yml)
+# HTTP API and web dashboard.
+# Read only when modules.web: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#web
+
+# Port the web API listens on (http://IP:Port)
+# See {{DOCS_URL}}/en/API_REFERENCE.md  for more information
+port: 25908
+
+# Web server settings
+
+# IP the API listens on. "0.0.0.0" = all interfaces.
+# Use "127.0.0.1" if only a proxy/site on the same machine queries it.
+bind-address: "0.0.0.0"
+
+# Threads serving HTTP requests (minimum 2). Live chat no longer uses threads.
+threads: 8
+
+# Max simultaneous tabs/connections to the live chat (/api/chat/stream)
+max-chat-clients: 20
+
+# How often (minutes) a history sample (online, TPS, totals) is saved for the
+# dashboard charts. Saved to data/history.json. Minimum 1.
+history-interval-minutes: 5
+
+# Max samples kept (288 x 5 min = 24 hours)
+history-max-points: 288
+
+# Allows admin actions from the dashboard (/api/admin/...): edit/reset
+# stats, reload, save, announce. They require security.enabled: true and the api-key
+# sent ONLY in the "Authorization: Bearer <key>" header (never ?key=).
+admin-enabled: true
+
+# If true, /api/admin responses include Access-Control-Allow-Origin (cors-origin).
+# Keep it false unless you administer from a site other than the built-in dashboard.
+admin-allow-cors: false
+
+# Logs every admin action (web and web console) to logs/web-audit.log
+audit-log: true
+
+security:
+  # Turns API security on or off (recommended: true)
+  enabled: true
+  # The secret key to access the API.
+  # If left empty, the plugin generates a random one at startup, saves it here and shows it in the console.
+  # Send it with the "Authorization: Bearer <key>" header.
+  api-key: ""
+  # Also allows sending the key as ?key=... in the URL (read-only; never for /api/admin).
+  # The built-in dashboard no longer needs it (live chat sends the header). Set it to false
+  # if none of your external sites uses ?key=.
+  allow-query-key: true
+  # Access-Control-Allow-Origin header value. "*" = any site can query the API (with the key).
+  # Example to restrict it: "https://losperris.site"
+  cors-origin: "*"

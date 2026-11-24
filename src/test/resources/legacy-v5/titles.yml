@@ -1,0 +1,76 @@
+# ─────────────────────────────────────────────────────────────
+#  LosPerrisStatsAPI · Títulos / Titles
+#  Se activa con modules.titles.enabled: true en config.yml.
+#  Enable with modules.titles.enabled: true in config.yml.
+#
+#  Cada título se consigue de UNA forma / Each title is unlocked in ONE way:
+#    stat + value      al llegar a ese valor de por vida / reaching that lifetime value
+#    season-top: N     acabar una temporada en el top N de cualquier estadística / finishing a season in the top N
+#    permission        mientras se tenga el permiso / while holding the permission
+#  name: texto o {es: "...", en: "..."} (admite colores &). icon: material del menú (opcional).
+#  El jugador elige el suyo: /lpa title <id> o /lpa menu. Variable: %title%
+# ─────────────────────────────────────────────────────────────
+
+titles:
+  asesino:
+    name: {es: "&cAsesino", en: "&cSlayer"}
+    stat: "kills"
+    value: 100
+    icon: "IRON_SWORD"
+  verdugo:
+    name: {es: "&4Verdugo", en: "&4Executioner"}
+    stat: "kills"
+    value: 1000
+    icon: "NETHERITE_SWORD"
+  cazador:
+    name: {es: "&2Cazador", en: "&2Hunter"}
+    stat: "mob_kills"
+    value: 1000
+    icon: "BOW"
+  minero:
+    name: {es: "&7Minero", en: "&7Miner"}
+    stat: "blocks_broken"
+    value: 10000
+    icon: "IRON_PICKAXE"
+  excavador:
+    name: {es: "&8Excavador incansable", en: "&8Tireless digger"}
+    stat: "blocks_broken"
+    value: 100000
+    icon: "NETHERITE_PICKAXE"
+  geologo:
+    name: {es: "&bGeólogo", en: "&bGeologist"}
+    stat: "ores_mined"
+    value: 2500
+    icon: "DIAMOND_ORE"
+  constructor:
+    name: {es: "&6Constructor", en: "&6Builder"}
+    stat: "blocks_placed"
+    value: 25000
+    icon: "BRICKS"
+  veterano:
+    name: {es: "&eVeterano", en: "&eVeteran"}
+    stat: "time"
+    value: 100
+    icon: "CLOCK"
+  viajero:
+    name: {es: "&aViajero", en: "&aTraveler"}
+    stat: "distance_walked"
+    value: 500
+    icon: "LEATHER_BOOTS"
+  pescador:
+    name: {es: "&3Pescador", en: "&3Angler"}
+    stat: "fish_caught"
+    value: 250
+    icon: "FISHING_ROD"
+  campeon:
+    name: {es: "&6&lCampeón", en: "&6&lChampion"}
+    season-top: 1
+    icon: "TOTEM_OF_UNDYING"
+  podio:
+    name: {es: "&eDel podio", en: "&ePodium"}
+    season-top: 3
+    icon: "GOLD_INGOT"
+  staff:
+    name: {es: "&dStaff", en: "&dStaff"}
+    permission: "losperris.title.staff"
+    icon: "SHIELD"

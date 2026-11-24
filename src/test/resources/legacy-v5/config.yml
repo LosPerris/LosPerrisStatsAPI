@@ -1,0 +1,718 @@
+#  ==========================================================================================
+#                             
+#  ==========================================================================================
+#   _               ______               _      _____ _       _          ___  ______ _____ 
+#  | |              | ___ \             (_)    /  ___| |     | |        / _ \ | ___ \_   _|
+#  | |     ___  ___ | |_/ /___ _ __ _ __ _ ___ \ `--.| |_ __ | |_ ___  / /_\ \| |_/ / | |  
+#  | |    / _ \/ __||  __/ _ \ '__| '__| / __| `--. \ __/ _` | __/ __| |  _  ||  __/  | |  
+#  | |___| (_) \__ \| | |  __/ |  | |  | \__ \/\__/ / || (_| | |_\__ \ | | | || |    _| |_
+#  \_____/\___/|___/\_|  \___|_|  |_|  |_|___/\____/ \__\__,_|\__|___/ \_| |_/\_|    \___/
+#                                                                                                
+#  ==========================================================================================
+#                             LosPerrisStatsAPI//Configuración
+#  ==========================================================================================
+
+# Versión del formato de este archivo. NO la modifique: el plugin la usa para migrar
+# automáticamente configuraciones antiguas (se hace una copia de seguridad antes).
+config-version: 5
+
+# +----------------------------------------------------+
+# |                      MÓDULOS                       |
+# +----------------------------------------------------+
+# Cada función es un módulo independiente. Un módulo desactivado no registra eventos,
+# tareas ni comandos: no consume nada. Los cambios se aplican con /lpa reload.
+# Use /lpa modules para ver cuáles están activos.
+modules:
+  # Registro de estadísticas, rankings y /lpa top|reset (base de casi todo lo demás)
+  stats:
+    enabled: true
+  # Detección de jugadores AFK (no reciben hitos mientras están AFK)
+  afk:
+    enabled: true
+  # Hitos y recompensas (milestones.yml)
+  milestones:
+    enabled: true
+  # Historial diario por jugador (sección 'history'): gráficas de progreso en el perfil
+  history:
+    enabled: true
+  # Tops semanales y mensuales con reinicio automático y anuncio de ganadores (sección 'periods')
+  periods:
+    enabled: true
+  # Galería de logros con rareza (% de jugadores que lo tienen). Usa los hitos de milestones.yml
+  achievements:
+    enabled: true
+  # Avisos de hitos a Discord por webhook (sección 'discord')
+  discord:
+    enabled: false
+  # Scoreboard lateral (sección 'scoreboard')
+  scoreboard:
+    enabled: true
+  # Menús /lpa menu, /lpa view y /lpa admin
+  gui:
+    enabled: true
+  # Expansión de PlaceholderAPI (%losperrisapi_...%); solo si PlaceholderAPI está instalado
+  placeholders:
+    enabled: true
+  # API HTTP y dashboard web (secciones 'port', 'web' y 'security')
+  web:
+    enabled: true
+  # Página y API PÚBLICAS de solo lectura (sin api-key) en /api/public/... y /?public
+  # (sección 'public'). Requiere el módulo web. La administración sigue protegida.
+  public:
+    enabled: false
+  # Consola web en vivo para administradores: registro filtrado y comandos (sección 'console').
+  # Requiere el módulo web y la api-key en el header.
+  console:
+    enabled: true
+  # Moderación desde el perfil y /lpa mod: kick, mute temporal, ban/tempban, warn e historial
+  moderation:
+    enabled: true
+  # Alertas de TPS, memoria y base de datos en la web, el juego y Discord (sección 'alerts')
+  alerts:
+    enabled: true
+  # Mapa de calor de actividad (día x hora) en el dashboard (sección 'heatmap')
+  heatmap:
+    enabled: true
+  # Copias de seguridad diarias de los datos (sección 'backups')
+  backups:
+    enabled: true
+  # Aviso de nuevas versiones (sección 'updates'; sin fuente configurada no hace nada)
+  updates:
+    enabled: true
+  # Misiones diarias y semanales (quests.yml). Dan recompensas: revise quests.yml antes de activarlo
+  quests:
+    enabled: false
+  # Rachas de conexión diaria con recompensas (sección 'streaks')
+  streaks:
+    enabled: false
+  # Recompensas cada X horas de juego activo, sin contar AFK (sección 'playtime-rewards')
+  playtime:
+    enabled: false
+  # Temporadas: ranking por temporada, premios, salón de la fama y reinicio limpio (sección 'seasons').
+  # Dan recompensas: revise seasons.rewards antes de activarlo
+  seasons:
+    enabled: false
+  # Títulos por estadísticas que el jugador elige y muestra (titles.yml y sección 'titles')
+  titles:
+    enabled: true
+  # Eventos temporales con ranking en vivo: /lpa event start (sección 'events')
+  events:
+    enabled: true
+  # Hologramas de ranking. Requiere DecentHolograms o FancyHolograms; sin ellos no hace nada
+  holograms:
+    enabled: true
+  # Bot de Discord bidireccional: /stats, /top, /online, chat, vinculación y roles (sección 'discordbot').
+  # Usa DiscordSRV si está instalado. Necesita un token: vea docs/es/DISCORD_SETUP.md
+  discordbot:
+    enabled: false
+
+# +----------------------------------------------------+
+# |                      IDIOMA                        |
+# +----------------------------------------------------+
+# Idioma por defecto (consola, anuncios, dashboard). Archivos en lang/<código>.yml: es, en
+# Puede añadir más idiomas copiando lang/en.yml con otro nombre (p. ej. lang/pt.yml).
+language: "es"
+# Si es true, cada jugador ve los mensajes en el idioma de su cliente de Minecraft
+# (si existe ese archivo; si no, el de arriba). Cada jugador puede forzarlo con /lpa lang.
+per-player-language: true
+# Zona horaria para "días", semanas y meses (historial y tops). Vacío = la del sistema.
+# Ejemplos: "America/Costa_Rica", "Europe/Madrid", "UTC"
+timezone: ""
+
+# +----------------------------------------------------+
+# |              CONFIGURACIÓN PRINCIPAL               |
+# +----------------------------------------------------+
+
+# Puerto donde se escuchará la API Web (http://IP:Puerto)
+# Revisa docs/es/API_REFERENCE.md (o docs/en/) para más información
+port: 25908
+
+# Ajustes del servidor web
+web:
+  # IP en la que escucha la API. "0.0.0.0" = todas las interfaces.
+  # Use "127.0.0.1" si solo la consulta un proxy/web en la misma máquina.
+  bind-address: "0.0.0.0"
+  # Hilos para atender peticiones HTTP (mínimo 2). El chat en vivo ya no ocupa hilos.
+  threads: 8
+  # Máximo de pestañas/conexiones simultáneas al chat en vivo (/api/chat/stream)
+  max-chat-clients: 20
+  # Cada cuántos minutos se guarda una muestra del historial (online, TPS, totales) para las
+  # gráficas del dashboard. Se guarda en server_data/history.json. Mínimo 1.
+  history-interval-minutes: 5
+  # Número máximo de muestras que se conservan (288 x 5 min = 24 horas)
+  history-max-points: 288
+  # Permite las acciones de administración desde el dashboard (/api/admin/...): editar/resetear
+  # estadísticas, recargar, guardar, anunciar. Requieren security.enabled: true y la api-key
+  # enviada SOLO en el header "Authorization: Bearer <key>" (nunca ?key=).
+  admin-enabled: true
+  # Si es true, las respuestas de /api/admin incluyen Access-Control-Allow-Origin (cors-origin).
+  # Déjelo en false salvo que administre desde otra web distinta al dashboard integrado.
+  admin-allow-cors: false
+  # Guarda cada acción de administración (web y consola web) en server_data/audit.log
+  audit-log: true
+
+# Prefijo que se mostrará en los mensajes del chat y la consola
+prefix: "&f[&aLosPerrisStats&f] &r"
+
+# Nombre de la carpeta donde se guardarán los datos de los jugadores (json)
+stats-folder: "server_data/players"
+
+# +----------------------------------------------------+
+# |                     SEGURIDAD                      |
+# +----------------------------------------------------+
+security:
+  # Activa o desactiva la seguridad de la API (recomendado: true)
+  enabled: true
+  # La clave secreta para acceder a la API.
+  # Si se deja vacía, el plugin genera una aleatoria al arrancar, la guarda aquí y la muestra en consola.
+  # Envíela con el header "Authorization: Bearer <key>".
+  api-key: ""
+  # Permite también enviar la key como ?key=... en la URL (solo para lectura; nunca para /api/admin).
+  # El dashboard integrado ya no la necesita (el chat en vivo envía el header). Póngalo en false
+  # si ninguna web externa suya usa ?key=.
+  allow-query-key: true
+  # Valor del header Access-Control-Allow-Origin. "*" = cualquier web puede consultar la API (con la key).
+  # Ejemplo para restringir: "https://losperris.site"
+  cors-origin: "*"
+
+# +----------------------------------------------------+
+# |                      DISCORD                       |
+# +----------------------------------------------------+
+# Se activa en modules.discord.enabled
+discord:
+  # La URL del Webhook de Discord
+  webhook-url: "PEGAR_TU_URL_AQUI"
+  # Nombre del remitente
+  username: "LosPerrisStats"
+  # Avatar del remitente
+  avatar-url: "https://i.ibb.co/d0c4ntd8/pato-minecraft.png"
+  # Color del embed (Hex o Entero). Default: Verde (estilo Minecraft) : #55FF55
+  embed-color: "#55FF55"
+  # Título del Embed de Discord cuando se desbloquea un hito
+  title: "¡Logro Desbloqueado!"
+
+# +----------------------------------------------------+
+# |              ESTADÍSTICAS A REGISTRAR              |
+# +----------------------------------------------------+
+tracked-stats:
+  # Muertes del jugador
+  deaths: true
+  # Asesinatos de otros jugadores (PvP)
+  player_kills: true
+  # Asesinatos de monstruos/animales (PvE)
+  mob_kills: true
+  # Tiempo de juego
+  play_time: true
+  blocks_broken: true
+  jumps: true
+  distance_walked: true
+  # Bloques colocados (suma de las estadísticas vanilla de uso de bloques)
+  blocks_placed: true
+  # Minerales extraídos, total y por tipo (carbón, hierro, diamante...)
+  ores_mined: true
+  fish_caught: true
+  villager_trades: true
+  # Daño causado / recibido (en corazones, 1 = 2 puntos de vida)
+  damage_dealt: true
+  damage_taken: true
+  # Desglose de muertes por causa (caída, lava, mobs, jugadores...)
+  death_causes: true
+
+# Segundos entre recálculos de las estadísticas que suman muchos valores vanilla
+# (bloques colocados y minerales) para jugadores online. Mínimo 10.
+computed-stats-interval: 60
+
+# +----------------------------------------------------+
+# |                    HISTORIAL                       |
+# +----------------------------------------------------+
+# Se activa en modules.history.enabled. Guarda una foto diaria de las estadísticas de cada
+# jugador en server_data/player_history/<uuid>.json (solo de quien jugó ese día).
+history:
+  # Días que se conservan (los más antiguos se borran solos)
+  retention-days: 90
+  # Cada cuántos minutos se actualiza la foto del día (mínimo 1)
+  interval-minutes: 10
+
+# +----------------------------------------------------+
+# |               TOPS SEMANAL Y MENSUAL               |
+# +----------------------------------------------------+
+# Se activa en modules.periods.enabled. Cuenta lo que cada jugador suma durante la semana o el
+# mes; al terminar se anuncian los ganadores (chat en el idioma de cada jugador y Discord),
+# se guardan en server_data/periods/<tipo>_archive.json y empieza un periodo nuevo.
+# Cierre manual: /lpa period end <weekly|monthly> o el botón del dashboard.
+periods:
+  weekly: true
+  monthly: true
+  # Día en que empieza la semana: MONDAY, SUNDAY...
+  week-start: "MONDAY"
+  # Estadísticas con ranking por periodo (claves de stats: kills, deaths, mob_kills, time,
+  # blocks_broken, blocks_placed, ores_mined, jumps, distance_walked, fish_caught, trades,
+  # damage_dealt, damage_taken)
+  stats:
+    - "kills"
+    - "mob_kills"
+    - "time"
+    - "blocks_broken"
+  # Segundos entre recálculos del ranking del periodo (mínimo 10)
+  update-interval: 60
+  # Periodos terminados que se guardan en el archivo
+  history-keep: 12
+  announce:
+    # Cuántos ganadores por estadística se anuncian (1-10)
+    top: 3
+    in-game: true
+    # Requiere modules.discord.enabled
+    discord: true
+  # Recompensas por puesto en CADA estadística. Comandos de consola; %player% = ganador.
+  # "money:<cantidad>" da dinero con Vault (solo si el ganador está online).
+  # Ejemplo:
+  #   rewards:
+  #     weekly:
+  #       "1":
+  #         - "give %player% diamond 5"
+  #         - "money:500"
+  rewards:
+    weekly: {}
+    monthly: {}
+
+# +----------------------------------------------------+
+# |                      LOGROS                        |
+# +----------------------------------------------------+
+# Se activa en modules.achievements.enabled. Cada nivel de milestones.yml es un logro; su
+# rareza depende del % de jugadores que lo tienen.
+achievements:
+  # Segundos entre recálculos de la rareza (mínimo 30)
+  update-interval: 300
+  # Umbrales en % de jugadores: por debajo de cada valor sube de categoría
+  tiers:
+    uncommon: 50
+    rare: 20
+    epic: 5
+    legendary: 1
+
+# +----------------------------------------------------+
+# |                 PÁGINA PÚBLICA                     |
+# +----------------------------------------------------+
+# Se activa en modules.public.enabled. Expone SOLO lectura y SIN api-key en /api/public/...
+# El dashboard en modo público: http://IP:Puerto/?public  (sin chat ni administración).
+public:
+  # Título que se muestra en la página pública (vacío = nombre del plugin)
+  title: ""
+  # Peticiones por minuto y por IP (0 = sin límite)
+  rate-limit: 60
+  # Access-Control-Allow-Origin de la API pública
+  cors-origin: "*"
+  # Secciones visibles
+  sections:
+    summary: true
+    leaderboards: true
+    players: true
+    profiles: true
+    periods: true
+    achievements: true
+    history: true
+    seasons: true
+    events: true
+    titles: true
+
+# +----------------------------------------------------+
+# |                    SCOREBOARD                      |
+# +----------------------------------------------------+
+
+# Se activa en modules.scoreboard.enabled
+# Variables disponibles (lista completa en docs/es/variables/scoreboard.md):
+#   %player_name% %kills% %deaths% %mob_kills% %time% %blocks_broken% %jumps% %distance_walked%
+#   %top_<tipo>_<pos>_name% / %top_<tipo>_<pos>_value%  (p. ej. %top_kills_1_name%, posiciones 1-100)
+#   Tipos: kills, deaths, mob_kills, time, blocks_broken, blocks_placed, ores_mined, jumps,
+#          distance_walked, fish_caught, trades, damage_dealt, damage_taken
+#   Tops del periodo: %weekly_kills_1_name% %monthly_time_1_value% %weekly_kills% (lo suyo)
+# Una variable desconocida se avisa en consola al cargar.
+scoreboard:
+  show-on-join: true # Si es false, los jugadores deben usar /lpa sb para verlo
+  title: "&e&lLOSPERRIS"
+  update-interval: 20 # Ticks (20 = 1 segundo). Mínimo 1.
+  lines:
+    - "&7----------------"
+    - "&f» &bJugador:"
+    - "   %player_name%"
+    - "&f⚔ &cKills:"
+    - "   %kills%"
+    - "&f☠ &7Muertes:"
+    - "   %deaths%"
+    - "&f⌚ &aTiempo:"
+    - "   %time%"
+    - "&7----------------"
+  # Líneas que se muestran MIENTRAS hay un evento en curso (módulo events). Vacío = siempre 'lines'.
+  event-lines:
+    - "&7----------------"
+    - "&6★ &e%event_name%"
+    - "&fQueda: &a%event_time%"
+    - "&fTu puesto: &b#%event_rank%"
+    - "&fTu puntuación: &b%event_score%"
+    - "&f1. &e%event_1_name% &7%event_1_value%"
+    - "&f2. &e%event_2_name% &7%event_2_value%"
+    - "&f3. &e%event_3_name% &7%event_3_value%"
+    - "&7----------------"
+
+# +----------------------------------------------------+
+# |                    CONSOLA WEB                     |
+# +----------------------------------------------------+
+# Se activa en modules.console.enabled. Solo administradores (api-key en el header).
+console:
+  # Líneas del registro que se guardan en memoria para quien abre la consola
+  buffer-lines: 300
+  # Conexiones simultáneas a la consola
+  max-clients: 3
+  # Límite de líneas por segundo enviadas al navegador (mínimo 5; el resto se resume en un aviso)
+  max-lines-per-second: 60
+  # Oculta direcciones IP en el registro
+  hide-ips: true
+  # Expresiones regulares cuyo texto se sustituye por *** (tokens, contraseñas...)
+  redact:
+    - "(?i)(password|token|api-key|secret)\\S*\\s*[:=]\\s*\\S+"
+  # Comandos permitidos, sin "/". Patrones: "list" (exacto), "say *" (con o sin argumentos),
+  # "eco*" (comodín). Se ignora el prefijo "plugin:". Vacío = todos salvo los de deny.
+  allow: []
+  # Comandos SIEMPRE bloqueados (tienen prioridad sobre allow). Mismo formato que allow.
+  deny:
+    - "stop"
+    - "restart"
+    - "reload *"
+    - "op *"
+    - "deop *"
+    - "lp *"
+    - "luckperms *"
+    - "pex *"
+    - "whitelist off"
+
+# +----------------------------------------------------+
+# |                    MODERACIÓN                      |
+# +----------------------------------------------------+
+# Se activa en modules.moderation.enabled. Comando: /lpa mod <kick|warn|mute|unmute|ban|unban|history> <jugador> [duración] [motivo]
+# Duraciones: 30s, 10m, 2h, 7d (combinables: 1d12h). "perm" = permanente.
+moderation:
+  # Sanciones guardadas por jugador (las más antiguas se descartan)
+  history-max: 100
+  # Avisar a los administradores conectados
+  notify-staff: true
+  # Enviar cada sanción a Discord (requiere modules.discord.enabled)
+  discord: false
+  # Comandos que un jugador silenciado tampoco puede usar
+  muted-blocked-commands:
+    - "msg"
+    - "tell"
+    - "w"
+    - "r"
+    - "me"
+    - "say"
+
+# +----------------------------------------------------+
+# |                      ALERTAS                       |
+# +----------------------------------------------------+
+# Se activa en modules.alerts.enabled. Una alerta se envía si el problema dura 'sustain-seconds'
+# y se repite como mucho cada 'cooldown-minutes' mientras siga.
+alerts:
+  cooldown-minutes: 10
+  check-interval-seconds: 5
+  tps:
+    enabled: true
+    # Alerta si el TPS baja de este valor
+    threshold: 15.0
+    sustain-seconds: 30
+  memory:
+    enabled: true
+    # Alerta si la memoria usada supera este % del máximo
+    percent: 90
+    sustain-seconds: 60
+  database:
+    # Alerta si el almacenamiento (MySQL/SQLite/archivos) deja de responder
+    enabled: true
+    check-interval-seconds: 30
+  notify:
+    web: true
+    in-game: true
+    # Requiere modules.discord.enabled
+    discord: true
+    # Avisar también cuando el problema se resuelve
+    discord-resolved: true
+
+# +----------------------------------------------------+
+# |                 MAPA DE ACTIVIDAD                  |
+# +----------------------------------------------------+
+heatmap:
+  # Semanas que se promedian (1-52)
+  weeks: 8
+  # Minutos entre muestras de jugadores conectados
+  sample-minutes: 5
+
+# +----------------------------------------------------+
+# |                COPIAS DE SEGURIDAD                 |
+# +----------------------------------------------------+
+# Se guardan en backups/data/data-AAAAMMDD-HHMMSS.zip (zona horaria de 'timezone').
+# Manual: /lpa backup now  ·  Lista: /lpa backup list
+backups:
+  # Hora diaria (HH:mm)
+  time: "04:00"
+  # Copias que se conservan (las más antiguas se borran)
+  keep: 7
+  # Si al arrancar la última copia tiene más de 25 horas, se hace una a los 2 minutos
+  catch-up: true
+  # Incluir los .yml de la carpeta del plugin
+  include-configs: true
+  # Carpetas (dentro de la del plugin) que se copian
+  folders:
+    - "server_data"
+
+# +----------------------------------------------------+
+# |                  ACTUALIZACIONES                   |
+# +----------------------------------------------------+
+# Comprueba en segundo plano si hay versión nueva. Vacío = desactivado.
+updates:
+  # github | modrinth | spigot
+  source: ""
+  # github: "usuario/repositorio" · modrinth: id o slug · spigot: id numérico del recurso
+  id: ""
+  check-hours: 12
+  # Avisar a los administradores al entrar
+  notify-admins: true
+
+# +----------------------------------------------------+
+# |                 RACHAS DE CONEXIÓN                 |
+# +----------------------------------------------------+
+# Se activa en modules.streaks.enabled. +1 por cada día seguido que el jugador entra (zona de
+# 'timezone'). Recompensas por día de racha: "money:<n>", "item:<MATERIAL>:<n>" o un comando
+# de consola (%player% = jugador). Los días que borre aquí no se vuelven a añadir.
+streaks:
+  # Al pasar este día la racha sigue subiendo, pero las recompensas se repiten en ciclo
+  # (con 7, el día 8 da lo del día 1). 0 = sin ciclo.
+  cycle-days: 7
+  rewards:
+    "1":
+      - "money:50"
+    "3":
+      - "money:150"
+    "7":
+      - "money:500"
+      - "item:DIAMOND:1"
+
+# +----------------------------------------------------+
+# |            RECOMPENSAS POR TIEMPO ACTIVO           |
+# +----------------------------------------------------+
+# Se activa en modules.playtime.enabled. Cuenta el tiempo jugado en bloques de 1 minuto.
+playtime-rewards:
+  # Cada cuántas horas activas se entrega la recompensa (admite decimales: 0.5 = 30 min)
+  every-hours: 1
+  # No contar el tiempo AFK (requiere modules.afk.enabled)
+  exclude-afk: true
+  rewards:
+    - "money:100"
+
+
+# +----------------------------------------------------+
+# |                    TEMPORADAS                      |
+# +----------------------------------------------------+
+# Se activa en modules.seasons.enabled. Cada temporada cuenta lo ganado desde su inicio (las
+# estadísticas de por vida NO se borran). Al terminar: archivo, premios, salón de la fama y
+# nueva temporada. Comandos: /lpa season (ver), /lpa season end (admin, termina ya).
+seasons:
+  # monthly, weekly, <N>d (p. ej. 90d) o manual (solo con /lpa season end o desde la web)
+  schedule: "monthly"
+  # Nombre de cada temporada; {number} = número de temporada
+  name-format: "Temporada {number}"
+  # Estadísticas con ranking de temporada (mismas claves que periods.stats)
+  stats:
+    - "kills"
+    - "mob_kills"
+    - "time"
+    - "blocks_broken"
+    - "ores_mined"
+  # Segundos entre recálculos del ranking (mínimo 10)
+  update-interval: 60
+  # Temporadas que se guardan en el salón de la fama
+  hall-of-fame-keep: 50
+  announce:
+    top: 3
+    in-game: true
+    discord: true
+  # Recompensas por puesto en CADA estadística (como periods.rewards). Ejemplo:
+  #   rewards:
+  #     "1":
+  #       - "give %player% netherite_ingot 1"
+  #       - "money:5000"
+  rewards: {}
+
+# +----------------------------------------------------+
+# |                      TÍTULOS                       |
+# +----------------------------------------------------+
+# Se activa en modules.titles.enabled. Los títulos se definen en titles.yml. El jugador elige el
+# suyo con /lpa title <id> o en el menú (/lpa menu). Variable: %title% (y %losperrisapi_title%).
+titles:
+  # Cómo se muestra; {title} = nombre del título
+  format: "&8[&r{title}&8] "
+  # Poner el título delante del nombre en el chat (desactívelo si usa otro plugin de chat con %title%)
+  chat-prefix: false
+  # Poner el título en la lista de jugadores (TAB)
+  tab-prefix: false
+  # Avisar al jugador cuando consigue un título
+  announce: true
+  # Elegir automáticamente el primer título conseguido si no tiene ninguno
+  auto-select: true
+  # Segundos entre comprobaciones de títulos por estadística de los conectados (mínimo 10)
+  check-interval: 60
+
+# +----------------------------------------------------+
+# |                      EVENTOS                       |
+# +----------------------------------------------------+
+# Se activa en modules.events.enabled. Un evento es una competición corta ("más bloques rotos en
+# 1 hora"): /lpa event start <preset|estadística> [duración] [nombre], o desde la web.
+# Ranking en vivo en la web, el scoreboard (scoreboard.event-lines) y una bossbar.
+# Sin evento en curso no consume nada.
+events:
+  # Segundos entre actualizaciones del ranking (mínimo 1)
+  update-interval: 5
+  bossbar: true
+  # PINK, BLUE, RED, GREEN, YELLOW, PURPLE o WHITE
+  bossbar-color: "YELLOW"
+  # Duración máxima permitida
+  max-duration: "7d"
+  # Eventos terminados que se guardan
+  history-keep: 20
+  announce:
+    top: 3
+    in-game: true
+    discord: true
+  # Premios por puesto si el preset no define los suyos. Comandos de consola; %player% = ganador.
+  rewards: {}
+  # Eventos preparados. name: texto o {es: ..., en: ...}; duration: 30m, 1h, 2h30m, 1d...
+  presets:
+    mineria:
+      stat: "blocks_broken"
+      duration: "1h"
+      name:
+        es: "Fiebre minera"
+        en: "Mining rush"
+      rewards:
+        "1":
+          - "give %player% diamond 5"
+        "2":
+          - "give %player% diamond 3"
+        "3":
+          - "give %player% diamond 1"
+    cazadores:
+      stat: "mob_kills"
+      duration: "30m"
+      name:
+        es: "Cazadores"
+        en: "Hunters"
+
+# +----------------------------------------------------+
+# |                    HOLOGRAMAS                      |
+# +----------------------------------------------------+
+# Se activa en modules.holograms.enabled. Necesita DecentHolograms o FancyHolograms (si no hay
+# ninguno, el módulo no hace nada). Se colocan en el juego: /lpa holo create <id> <estadística>
+# [alltime|weekly|monthly|season] [tamaño], o <id> event para el evento en curso.
+holograms:
+  # auto, decentholograms, fancyholograms o none
+  provider: "auto"
+  # Filas por defecto (1-15)
+  default-size: 10
+  # Segundos entre actualizaciones (mínimo 5). Solo se envían las líneas que cambian.
+  update-interval: 10
+
+# +----------------------------------------------------+
+# |                   BOT DE DISCORD                   |
+# +----------------------------------------------------+
+# Se activa en modules.discordbot.enabled. Guía completa: docs/es/DISCORD_SETUP.md
+# Distinto del webhook de la sección 'discord' (solo envía avisos); ambos pueden convivir.
+discordbot:
+  # auto: usa DiscordSRV si está instalado (su chat y su vinculación) y si no, el bot integrado.
+  # embedded: siempre el bot integrado. discordsrv: solo con DiscordSRV.
+  mode: "auto"
+  # Token del bot (portal de desarrolladores de Discord). También puede dejarlo vacío y usar la
+  # variable de entorno LPA_DISCORD_TOKEN. Nunca se escribe en el registro.
+  token: ""
+  # ID del servidor de Discord (clic derecho > Copiar ID con el modo desarrollador)
+  guild-id: ""
+  # Registrar los comandos de barra (/stats, /top, /online, /link, /unlink, /staff)
+  commands: true
+  # Puente de chat juego <-> canal (solo bot integrado; con DiscordSRV lo hace DiscordSRV).
+  # Necesita el intent MESSAGE CONTENT activado en el portal. Nadie puede mencionar @everyone,
+  # @here, usuarios ni roles desde el juego.
+  bridge:
+    enabled: false
+    channel-id: ""
+    # {player} y {message}
+    to-discord-format: "**{player}**: {message}"
+    # {user} y {message} (los colores del mensaje de Discord se eliminan)
+    to-minecraft-format: "&9[Discord] &b{user}&7: &f{message}"
+    max-length: 256
+    # Avisar de entradas, salidas, arranque y apagado
+    join-quit: true
+  # Vinculación: /lpa discord link en el juego da un código; /link <código> en Discord.
+  link:
+    code-length: 6
+    code-expiry: "10m"
+  # Roles automáticos para cuentas vinculadas (IDs de rol). El bot necesita "Gestionar roles" y
+  # estar por encima de esos roles. Solo quita los roles que puso él.
+  roles:
+    # Rol para cualquier cuenta vinculada ("" = ninguno)
+    linked: ""
+    # "<estadística>:<valor>": "<id de rol>"   ej.  "kills:1000": "123456789012345678"
+    milestones: {}
+    # "<estadística>:<puesto>": "<id de rol>"  ej.  "kills:3": "123..." = mientras esté en el top 3
+    top: {}
+    sync-interval: "10m"
+  # /staff <comando>: solo usuarios con alguno de estos roles. Se ejecuta como consola.
+  staff:
+    role-ids: []
+    # Mismo formato que console.allow/deny. Vacío = todos salvo los de deny
+    commands-allow:
+      - "list"
+      - "say *"
+      - "kick *"
+      - "lpa *"
+    commands-deny:
+      - "op *"
+      - "deop *"
+      - "stop"
+      - "restart"
+      - "lp *"
+      - "luckperms *"
+  # Solo para pruebas (servidores simulados). No los cambie.
+  api-url: "https://discord.com/api/v10"
+  gateway-url: "wss://gateway.discord.gg"
+
+# +----------------------------------------------------+
+# |                  MUNDOS EXCLUIDOS                  |
+# +----------------------------------------------------+
+
+# Lista de mundos donde NO se registrarán estadísticas ni contarán hitos
+disabled-worlds:
+  - "ejemplo_mundo_off"
+
+# +----------------------------------------------------+
+# |               AJUSTES DE RENDIMIENTO               |
+# +----------------------------------------------------+
+
+# Intervalo en segundos para el guardado automático de datos al disco
+auto-save-interval: 300
+
+# Tiempo en segundos entre recálculos del ranking (/api/top, /lpa top y placeholders). Mínimo 5.
+leaderboard-cache: 60
+
+# Tiempo en segundos sin actividad para considerar a un jugador AFK (No recibirá hitos/recompensas)
+afk-timeout: 300
+
+# +----------------------------------------------------+
+# |                DEPURACIÓN (DEBUG)                  |
+# +----------------------------------------------------+
+
+# Activa logs detallados en la consola para detectar errores
+debug:
+  enabled: false
+  sections:
+    web: true
+    storage: true
+    stats: true
+    security: true
+    general: true

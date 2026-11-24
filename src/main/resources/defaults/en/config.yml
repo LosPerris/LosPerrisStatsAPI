@@ -1,0 +1,175 @@
+#  ==========================================================================================
+#
+#  ==========================================================================================
+#   _               ______               _      _____ _       _          ___  ______ _____
+#  | |              | ___ \             (_)    /  ___| |     | |        / _ \ | ___ \_   _|
+#  | |     ___  ___ | |_/ /___ _ __ _ __ _ ___ \ `--.| |_ __ | |_ ___  / /_\ \| |_/ / | |
+#  | |    / _ \/ __||  __/ _ \ '__| '__| / __| `--. \ __/ _` | __/ __| |  _  ||  __/  | |
+#  | |___| (_) \__ \| | |  __/ |  | |  | \__ \/\__/ / || (_| | |_\__ \ | | | || |    _| |_
+#  \_____/\___/|___/\_|  \___|_|  |_|  |_|___/\____/ \__\__,_|\__|___/ \_| |_/\_|    \___/
+#
+#  ==========================================================================================
+#                             LosPerrisStatsAPI // Configuration 
+#  ==========================================================================================
+#
+#  ┌─ START HERE ─────────────────────────────────────────────────────────────────────────┐
+#  │ 1. Pick the language in general → language.                                           │
+#  │ 2. Turn modules on or off in modules (true / false).                                  │
+#  │ 3. Save and run /lpa reload (no restart needed).                                      │
+#  │ 4. Web and dashboard: settings/web.yml · Discord: settings/discord.yml                │
+#  │ 5. Help: /lpa help · /lpa modules · guide: {{DOCS_URL}}/en/GUIDE.md
+#  └───────────────────────────────────────────────────────────────────────────────────────┘
+#
+#  Folders:
+#    settings/  web, Discord, database and each enabled module
+#    lang/      texts · data/  player data · backups/  backups
+#
+#  Times: "30s", "5m", "1h", "1d" (a plain number still works as before).
+#  ==========================================================================================
+
+# Format version. Do not change it: it is used to migrate old configurations.
+config-version: 10
+
+general:
+  # Language of the console, announcements and dashboard: es or en (files in lang/)
+  language: "en"
+  # Each player sees messages in their client's language (if that file exists)
+  per-player-language: true
+  # Time zone for days, weeks and months. Empty = the system one. E.g. "America/Costa_Rica"
+  timezone: ""
+  # First day of the week: MONDAY, SUNDAY...
+  week-start: "MONDAY"
+  # Prefix of chat and console messages
+  prefix: "&f[&aLosPerrisStats&f] &r"
+  # Worlds where stats are not tracked
+  disabled-worlds:
+    - "example_world_off"
+  # How often player data is saved to disk
+  auto-save: "5m"
+
+# true = enabled, false = disabled. A disabled module reads nothing and uses no resources.
+# Enabling one with its own file creates it in settings/. Status of all: /lpa modules
+# Addons (e.g. LosPerrisExtras: titles, quests, streaks, seasons, events, holograms, moderation
+# and alerts) add their switches here, off, under "# ===== <addon> =====".
+modules:
+  # ── CORE ──
+  stats: true             # Stats, rankings and /lpa top
+  web: true               # HTTP API and dashboard → settings/web.yml
+  discord-webhook: false  # Discord notices via webhook → settings/discord.yml
+  discord-bot: false      # Discord bot: /stats, /top, chat and roles → settings/discord.yml
+  milestones: false       # Milestones and achievements gallery (give rewards) → settings/milestones.yml
+  scoreboard: true        # Sidebar scoreboard → settings/scoreboard.yml
+  afk: true               # AFK detection → settings/afk.yml
+  gui: true               # Menus /lpa menu, /lpa view and /lpa admin
+  placeholders: true      # PlaceholderAPI %losperrisapi_...%
+  # ── WEB ──
+  public-page: false      # Read-only public page (requires web)
+  web-console: true       # Live console in the dashboard (requires web)
+  heatmap: true           # Activity heatmap in the dashboard
+  # ── SERVER AND DATA ──
+  periods: true           # Weekly and monthly tops
+  history: true           # Daily history per player (charts)
+  backups: true           # Daily backups
+  updates: true           # New version notice
+
+# ── stats · Statistics ──
+stats:
+  # Stats that are tracked (false = not counted)
+  tracked:
+    deaths: true
+    player_kills: true
+    mob_kills: true
+    play_time: true
+    blocks_broken: true
+    blocks_placed: true
+    ores_mined: true
+    jumps: true
+    distance_walked: true
+    fish_caught: true
+    villager_trades: true
+    damage_dealt: true
+    damage_taken: true
+    death_causes: true
+  # How often blocks placed and ores are recalculated (minimum 10s)
+  computed-stats-interval: "60s"
+  # How often the ranking is recalculated (minimum 5s)
+  leaderboard-cache: "60s"
+
+# ── periods · Weekly and monthly tops ──
+periods:
+  weekly: true
+  monthly: true
+  # Stats with a ranking per period (names from stats.tracked)
+  stats:
+    - "player_kills"
+    - "mob_kills"
+    - "play_time"
+    - "blocks_broken"
+  # How often the period ranking is recalculated (minimum 10s)
+  update-interval: "60s"
+  # Finished periods that are kept
+  history-keep: 12
+  announce:
+    # Winners announced per stat (1-10)
+    top: 3
+    in-game: true
+    # Needs the discord-webhook module
+    discord: true
+  # Prizes per place in each stat. Formats:
+  #   "money:500"             money (Vault, winner online)
+  #   "item:DIAMOND:3"        item and amount
+  #   "command:give %player% emerald 5"   console command
+  #   "say Congrats %player%"             any console command
+  # Example:
+  #   weekly:
+  #     "1": ["money:1000", "item:DIAMOND:3"]
+  #     "2": ["money:500"]
+  rewards:
+    weekly: {}
+    monthly: {}
+
+# ── history · History ──
+history:
+  # Days that are kept
+  retention-days: 90
+  # How often the daily snapshot is updated (minimum 1m)
+  update-every: "10m"
+
+# ── backups · Backups ──
+backups:
+  # Daily time (HH:mm)
+  time: "04:00"
+  # Backups that are kept
+  keep: 7
+  # If the last backup is older than 25 hours at startup, one is made right away
+  catch-up: true
+  # Include config.yml, settings/ and lang/
+  include-configs: true
+  # Folders that are copied (inside the plugin folder)
+  folders:
+    - "data"
+
+# ── updates · Updates ──
+updates:
+  # github, modrinth or spigot (empty = not checked)
+  source: ""
+  # github: "user/repository" · modrinth: id or slug · spigot: numeric id
+  id: ""
+  # How often it checks (minimum 1h)
+  check-every: "12h"
+  # Notify administrators when they join
+  notify-admins: true
+
+# ── advanced · Only if you know what you are doing ──
+advanced:
+  # Folder for player data (json), inside the plugin folder
+  stats-folder: "data/players"
+  # Detailed console logging to find errors
+  debug:
+    enabled: false
+    sections:
+      web: true
+      storage: true
+      stats: true
+      security: true
+      general: true

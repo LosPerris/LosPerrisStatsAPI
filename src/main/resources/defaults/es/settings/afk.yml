@@ -1,0 +1,7 @@
+# LosPerrisStatsAPI · AFK (settings/afk.yml)
+# Detecta jugadores AFK; mientras lo estén no ganan hitos ni recompensas.
+# Se lee solo si modules.afk: true en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#afk
+
+# Tiempo sin actividad para considerar AFK a un jugador
+timeout: "5m"

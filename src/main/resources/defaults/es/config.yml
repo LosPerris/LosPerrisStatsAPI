@@ -1,0 +1,175 @@
+#  ==========================================================================================
+#
+#  ==========================================================================================
+#   _               ______               _      _____ _       _          ___  ______ _____
+#  | |              | ___ \             (_)    /  ___| |     | |        / _ \ | ___ \_   _|
+#  | |     ___  ___ | |_/ /___ _ __ _ __ _ ___ \ `--.| |_ __ | |_ ___  / /_\ \| |_/ / | |
+#  | |    / _ \/ __||  __/ _ \ '__| '__| / __| `--. \ __/ _` | __/ __| |  _  ||  __/  | |
+#  | |___| (_) \__ \| | |  __/ |  | |  | \__ \/\__/ / || (_| | |_\__ \ | | | || |    _| |_
+#  \_____/\___/|___/\_|  \___|_|  |_|  |_|___/\____/ \__\__,_|\__|___/ \_| |_/\_|    \___/
+#
+#  ==========================================================================================
+#                             LosPerrisStatsAPI // Configuración
+#  ==========================================================================================
+#
+#  ┌─ EMPIECE AQUÍ ───────────────────────────────────────────────────────────────────────┐
+#  │ 1. Elija el idioma en general → language.                                             │
+#  │ 2. Active o apague módulos en modules (true / false).                                 │
+#  │ 3. Guarde y ejecute /lpa reload (no hace falta reiniciar).                            │
+#  │ 4. Web y dashboard: settings/web.yml · Discord: settings/discord.yml                  │
+#  │ 5. Dudas: /lpa help · /lpa modules · guía: {{DOCS_URL}}/es/GUIA.md
+#  └───────────────────────────────────────────────────────────────────────────────────────┘
+#
+#  Carpetas:
+#    settings/  ajustes de web, Discord, base de datos y de cada módulo activo
+#    lang/      textos · data/  datos de jugadores · backups/  copias de seguridad
+#
+#  Tiempos: "30s", "5m", "1h", "1d" (un número solo sigue valiendo como antes).
+#  ==========================================================================================
+
+# Versión del formato. No la cambie: sirve para migrar configuraciones antiguas.
+config-version: 10
+
+general:
+  # Idioma de la consola, los anuncios y el dashboard: es o en (archivos en lang/)
+  language: "es"
+  # Cada jugador ve los mensajes en el idioma de su cliente (si existe el archivo)
+  per-player-language: true
+  # Zona horaria para días, semanas y meses. Vacío = la del sistema. Ej.: "America/Costa_Rica"
+  timezone: ""
+  # Día en que empieza la semana: MONDAY, SUNDAY...
+  week-start: "MONDAY"
+  # Prefijo de los mensajes del chat y la consola
+  prefix: "&f[&aLosPerrisStats&f] &r"
+  # Mundos donde no se registran estadísticas
+  disabled-worlds:
+    - "ejemplo_mundo_off"
+  # Cada cuánto se guardan los datos de los jugadores en el disco
+  auto-save: "5m"
+
+# true = activo, false = apagado. Un módulo apagado no lee nada ni consume recursos.
+# Al activar uno con archivo propio se crea en settings/. Estado de todos: /lpa modules
+# Los addons (p. ej. LosPerrisExtras: títulos, misiones, rachas, temporadas, eventos, hologramas,
+# moderación y alertas) añaden aquí sus interruptores, apagados, bajo "# ===== <addon> =====".
+modules:
+  # ── NÚCLEO ──
+  stats: true             # Estadísticas, rankings y /lpa top
+  web: true               # API HTTP y dashboard → settings/web.yml
+  discord-webhook: false  # Avisos a Discord por webhook → settings/discord.yml
+  discord-bot: false      # Bot de Discord: /stats, /top, chat y roles → settings/discord.yml
+  milestones: false       # Hitos y galería de logros (dan recompensas) → settings/milestones.yml
+  scoreboard: true        # Scoreboard lateral → settings/scoreboard.yml
+  afk: true               # Detección de AFK → settings/afk.yml
+  gui: true               # Menús /lpa menu, /lpa view y /lpa admin
+  placeholders: true      # PlaceholderAPI %losperrisapi_...%
+  # ── WEB ──
+  public-page: false      # Página pública de solo lectura (requiere web)
+  web-console: true       # Consola en vivo en el dashboard (requiere web)
+  heatmap: true           # Mapa de actividad en el dashboard
+  # ── SERVIDOR Y DATOS ──
+  periods: true           # Tops semanal y mensual
+  history: true           # Historial diario por jugador (gráficas)
+  backups: true           # Copias de seguridad diarias
+  updates: true           # Aviso de versiones nuevas
+
+# ── stats · Estadísticas ──
+stats:
+  # Estadísticas que se registran (false = no se cuenta)
+  tracked:
+    deaths: true
+    player_kills: true
+    mob_kills: true
+    play_time: true
+    blocks_broken: true
+    blocks_placed: true
+    ores_mined: true
+    jumps: true
+    distance_walked: true
+    fish_caught: true
+    villager_trades: true
+    damage_dealt: true
+    damage_taken: true
+    death_causes: true
+  # Cada cuánto se recalculan bloques colocados y minerales (mínimo 10s)
+  computed-stats-interval: "60s"
+  # Cada cuánto se recalcula el ranking (mínimo 5s)
+  leaderboard-cache: "60s"
+
+# ── periods · Tops semanal y mensual ──
+periods:
+  weekly: true
+  monthly: true
+  # Estadísticas con ranking por periodo (nombres de stats.tracked)
+  stats:
+    - "player_kills"
+    - "mob_kills"
+    - "play_time"
+    - "blocks_broken"
+  # Cada cuánto se recalcula el ranking del periodo (mínimo 10s)
+  update-interval: "60s"
+  # Periodos terminados que se guardan
+  history-keep: 12
+  announce:
+    # Ganadores anunciados por estadística (1-10)
+    top: 3
+    in-game: true
+    # Necesita el módulo discord-webhook
+    discord: true
+  # Premios por puesto en cada estadística. Formatos:
+  #   "money:500"             dinero (Vault, ganador conectado)
+  #   "item:DIAMOND:3"        objeto y cantidad
+  #   "command:give %player% emerald 5"   comando de consola
+  #   "say Felicidades %player%"          cualquier comando de consola
+  # Ejemplo:
+  #   weekly:
+  #     "1": ["money:1000", "item:DIAMOND:3"]
+  #     "2": ["money:500"]
+  rewards:
+    weekly: {}
+    monthly: {}
+
+# ── history · Historial ──
+history:
+  # Días que se conservan
+  retention-days: 90
+  # Cada cuánto se actualiza la foto del día (mínimo 1m)
+  update-every: "10m"
+
+# ── backups · Copias de seguridad ──
+backups:
+  # Hora diaria (HH:mm)
+  time: "04:00"
+  # Copias que se conservan
+  keep: 7
+  # Si la última copia tiene más de 25 horas al arrancar, se hace una enseguida
+  catch-up: true
+  # Incluir config.yml, settings/ y lang/
+  include-configs: true
+  # Carpetas que se copian (dentro de la del plugin)
+  folders:
+    - "data"
+
+# ── updates · Actualizaciones ──
+updates:
+  # github, modrinth o spigot (vacío = no se comprueba)
+  source: ""
+  # github: "usuario/repositorio" · modrinth: id o slug · spigot: id numérico
+  id: ""
+  # Cada cuánto se comprueba (mínimo 1h)
+  check-every: "12h"
+  # Avisar a los administradores al entrar
+  notify-admins: true
+
+# ── advanced · Solo si sabe lo que hace ──
+advanced:
+  # Carpeta de los datos de los jugadores (json), dentro de la del plugin
+  stats-folder: "data/players"
+  # Registro detallado en la consola para buscar errores
+  debug:
+    enabled: false
+    sections:
+      web: true
+      storage: true
+      stats: true
+      security: true
+      general: true

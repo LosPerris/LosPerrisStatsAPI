@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0d1014">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://minotar.net; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <title>LosPerris Dashboard</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Pantalla de acceso -->
+<div id="login-overlay" class="login-overlay" hidden>
+    <form id="login-form" class="login-box card" autocomplete="off">
+        <img class="login-logo" src="favicon.svg" alt="" width="56" height="56">
+        <h1>LosPerris<span>Stats</span></h1>
+        <p class="muted" data-i18n="login.subtitle">Introduzca la API Key del servidor</p>
+        <label class="sr-only" for="apiKeyInput">API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="Clave de seguridad" data-i18n-ph="login.placeholder" required autocomplete="current-password">
+        <label class="check"><input type="checkbox" id="rememberKey"> <span data-i18n="login.remember">Recordar en este navegador</span></label>
+        <button type="submit" class="btn btn-primary btn-block" data-i18n="login.submit">Entrar</button>
+        <p id="login-error" class="error-text" hidden></p>
+    </form>
+</div>
+
+<div class="app" id="app" hidden>
+    <!-- Barra lateral (escritorio) / barra inferior (móvil) -->
+    <nav class="sidebar" aria-label="Navegación principal" data-i18n-aria="nav.main">
+        <a class="brand" href="#/overview">
+            <img src="favicon.svg" alt="" width="34" height="34">
+            <span><strong>LosPerris</strong><small id="brand-sub">Stats Dashboard</small></span>
+        </a>
+        <a class="nav-link" data-page="overview" href="#/overview"><span class="ico">📊</span><span data-i18n="nav.overview">Resumen</span></a>
+        <a class="nav-link" data-page="leaderboards" href="#/leaderboards"><span class="ico">🏆</span><span data-i18n="nav.leaderboards">Ranking</span></a>
+        <a class="nav-link" data-page="players" href="#/players"><span class="ico">👥</span><span data-i18n="nav.players">Jugadores</span></a>
+        <a class="nav-link" data-page="compare" href="#/compare"><span class="ico">⚖️</span><span data-i18n="nav.compare">Comparar</span></a>
+        <a class="nav-link" data-page="seasons" href="#/seasons" hidden><span class="ico">🏅</span><span data-i18n="nav.seasons">Temporadas</span></a>
+        <a class="nav-link" data-page="events" href="#/events" hidden><span class="ico">🎯</span><span data-i18n="nav.events">Eventos</span></a>
+        <a class="nav-link" data-page="chat" href="#/chat"><span class="ico">💬</span><span data-i18n="nav.chat">Chat</span><span class="badge" id="chat-unread" hidden>0</span></a>
+        <a class="nav-link" data-page="admin" href="#/admin" id="nav-admin"><span class="ico">🛡️</span><span data-i18n="nav.admin">Admin</span></a>
+        <div class="sidebar-foot">
+            <span class="tag public-badge" id="public-badge" hidden data-i18n="pub.badge">Vista pública</span>
+            <div class="server-pill" id="server-pill"><span class="dot"></span><span id="server-pill-text" data-i18n="nav.connecting">Conectando…</span></div>
+            <div class="btn-row">
+                <button class="btn btn-ghost btn-sm" id="lang-btn" type="button" data-i18n="lang.toggle" data-i18n-title="lang.toggle.title">EN</button>
+                <button class="btn btn-ghost btn-sm" id="logout-btn" type="button" data-i18n="nav.logout">Cerrar sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1 id="page-title">Resumen</h1>
+                <p class="muted" id="page-subtitle"></p>
+            </div>
+            <form class="quick-search" id="quick-search" role="search">
+                <label class="sr-only" for="quickSearchInput" data-i18n="search.label">Buscar jugador</label>
+                <input id="quickSearchInput" type="search" placeholder="Buscar jugador…" data-i18n-ph="search.placeholder" maxlength="16" list="player-names" autocomplete="off">
+                <button class="btn btn-primary btn-sm" type="submit" data-i18n="search.go">Ver</button>
+            </form>
+        </header>
+        <datalist id="player-names"></datalist>
+
+        <!-- RESUMEN -->
+        <section class="page" id="page-overview" hidden>
+            <div class="grid kpis" id="server-kpis"></div>
+            <h2 class="section-title" data-i18n="ov.totals">Totales del servidor</h2>
+            <div class="grid stat-cards" id="totals-cards"></div>
+            <div class="grid two" id="ov-history">
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="ov.online-chart">Jugadores online</h3>
+                        <div class="seg" id="history-range">
+                            <button type="button" data-h="6">6 h</button><button type="button" data-h="24" class="active">24 h</button><button type="button" data-h="0" data-i18n="ov.all">Todo</button>
+                        </div>
+                    </div>
+                    <div class="chart-box"><canvas id="chart-online" aria-label="Jugadores online en el tiempo" data-i18n-aria="ov.online-chart.aria"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-head"><h3>TPS</h3><span class="muted small" id="tps-now"></span></div>
+                    <div class="chart-box"><canvas id="chart-tps" aria-label="TPS en el tiempo" data-i18n-aria="ov.tps.aria"></canvas></div>
+                </div>
+            </div>
+            <div class="grid two">
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="ov.hours">Distribución de horas jugadas</h3></div>
+                    <div class="chart-box"><canvas id="chart-hours" aria-label="Distribución de horas jugadas" data-i18n-aria="ov.hours"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="ov.activity">Actividad (última conexión)</h3></div>
+                    <div class="donut-wrap">
+                        <div class="chart-box donut"><canvas id="chart-activity" aria-label="Actividad" data-i18n-aria="ov.activity.aria"></canvas></div>
+                        <ul class="legend" id="activity-legend"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card" id="ov-heatmap" hidden>
+                <div class="card-head"><h3 data-i18n="hm.title">Actividad por día y hora</h3><span class="muted small" id="heatmap-peak"></span></div>
+                <div class="heatmap" id="heatmap-grid" role="img" aria-label="Mapa de calor de jugadores online" data-i18n-aria="hm.aria"></div>
+                <p class="muted small" id="heatmap-sub"></p>
+            </div>
+            <h2 class="section-title">Top 5</h2>
+            <div class="grid top-mini" id="top-mini"></div>
+        </section>
+
+        <!-- RANKING -->
+        <section class="page" id="page-leaderboards" hidden>
+            <div class="lb-period-row">
+                <div class="seg" id="lb-period" hidden>
+                    <button type="button" data-period="total" class="active" data-i18n="lb.period.total">Total</button><button type="button" data-period="weekly" data-i18n="lb.period.weekly">Semanal</button><button type="button" data-period="monthly" data-i18n="lb.period.monthly">Mensual</button>
+                </div>
+                <span class="muted small" id="lb-period-ends"></span>
+            </div>
+            <div class="chips" id="lb-chips" role="tablist"></div>
+            <div class="grid two lb-layout">
+                <div class="card">
+                    <div class="card-head"><h3 id="lb-chart-title">Top 10</h3></div>
+                    <div class="chart-box tall"><canvas id="chart-lb" aria-label="Gráfica del ranking" data-i18n-aria="lb.chart.aria"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="lb.table">Clasificación</h3>
+                        <label class="inline"><span data-i18n="lb.show">Mostrar</span>
+                            <select id="lb-limit"><option>10</option><option selected>25</option><option>50</option><option>100</option></select>
+                        </label>
+                    </div>
+                    <div class="table-wrap"><table class="table" id="lb-table">
+                        <thead><tr><th>#</th><th data-i18n="col.player">Jugador</th><th class="num" data-i18n="col.value">Valor</th></tr></thead>
+                        <tbody></tbody>
+                    </table></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JUGADORES -->
+        <section class="page" id="page-players" hidden>
+            <h2 class="section-title"><span data-i18n="pl.online-now">Conectados ahora</span> <span class="count" id="online-count">0</span></h2>
+            <div class="grid player-cards" id="online-grid"></div>
+            <h2 class="section-title" data-i18n="pl.directory">Directorio</h2>
+            <div class="card">
+                <div class="toolbar">
+                    <input type="search" id="dir-search" placeholder="Filtrar por nombre…" maxlength="16" aria-label="Filtrar por nombre" data-i18n-ph="pl.filter" data-i18n-aria="pl.filter">
+                    <select id="dir-sort" aria-label="Ordenar por" data-i18n-aria="pl.sort">
+                        <option value="name" data-i18n="pl.sort.name">Nombre</option>
+                        <option value="hours_played" selected data-i18n="stat.hours_played">Horas jugadas</option>
+                        <option value="player_kills" data-i18n="stat.player_kills">Asesinatos PvP</option>
+                        <option value="mob_kills" data-i18n="stat.mob_kills">Mobs</option>
+                        <option value="deaths" data-i18n="stat.deaths">Muertes</option>
+                        <option value="blocks_broken" data-i18n="stat.blocks_broken">Bloques rotos</option>
+                        <option value="jumps" data-i18n="stat.jumps">Saltos</option>
+                        <option value="distance_walked" data-i18n="stat.distance_walked">Distancia</option>
+                        <option value="blocks_placed" data-i18n="stat.blocks_placed">Bloques colocados</option>
+                        <option value="ores_mined" data-i18n="stat.ores_mined">Minerales</option>
+                        <option value="fish_caught" data-i18n="stat.fish_caught">Peces pescados</option>
+                        <option value="last_updated" data-i18n="pl.sort.last">Última actualización</option>
+                    </select>
+                </div>
+                <div class="table-wrap"><table class="table" id="dir-table">
+                    <thead><tr><th data-i18n="col.player">Jugador</th><th class="num" data-i18n="col.hours">Horas</th><th class="num hide-sm" data-i18n="col.pvp">PvP</th><th class="num hide-sm" data-i18n="col.mobs">Mobs</th><th class="num hide-sm" data-i18n="col.deaths">Muertes</th><th class="num" data-i18n="col.seen">Visto</th></tr></thead>
+                    <tbody></tbody>
+                </table></div>
+                <div class="pager" id="dir-pager"></div>
+            </div>
+        </section>
+
+        <!-- PERFIL -->
+        <section class="page" id="page-profile" hidden>
+            <div id="profile-root"></div>
+            <div id="profile-extra" class="stack"></div>
+        </section>
+
+        <!-- COMPARAR -->
+        <section class="page" id="page-compare" hidden>
+            <form class="card toolbar cmp-form" id="compare-form" autocomplete="off">
+                <label class="sr-only" for="cmpA" data-i18n="cmp.a">Jugador 1</label>
+                <input id="cmpA" maxlength="16" list="player-names" placeholder="Jugador 1" data-i18n-ph="cmp.a">
+                <b class="cmp-vs-mini">VS</b>
+                <label class="sr-only" for="cmpB" data-i18n="cmp.b">Jugador 2</label>
+                <input id="cmpB" maxlength="16" list="player-names" placeholder="Jugador 2" data-i18n-ph="cmp.b">
+                <button class="btn btn-primary" type="submit" data-i18n="cmp.go">Comparar</button>
+            </form>
+            <div id="compare-root" class="stack"></div>
+        </section>
+
+        <!-- CHAT -->
+        <section class="page" id="page-chat" hidden>
+            <div class="card chat-card">
+                <div class="toolbar">
+                    <input type="search" id="chat-search" placeholder="Buscar en el chat…" aria-label="Buscar en el chat" data-i18n-ph="chat.search" data-i18n-aria="chat.search">
+                    <select id="chat-filter" aria-label="Tipo de mensaje" data-i18n-aria="chat.type">
+                        <option value="all" data-i18n="chat.all">Todo</option>
+                        <option value="chat" data-i18n="chat.messages">Mensajes</option>
+                        <option value="join" data-i18n="chat.joins">Entradas</option>
+                        <option value="quit" data-i18n="chat.quits">Salidas</option>
+                        <option value="system" data-i18n="chat.system">Sistema</option>
+                    </select>
+                    <span class="status-pill" id="chat-status"><span class="dot"></span><span data-i18n="chat.disconnected">Desconectado</span></span>
+                </div>
+                <div class="switches" id="toast-switches"></div>
+                <div class="chat-box" id="chat-box" aria-live="polite"></div>
+                <button class="btn btn-primary new-msgs" id="chat-new" type="button" hidden data-i18n="chat.new">Nuevos mensajes ↓</button>
+            </div>
+        </section>
+
+        <!-- TEMPORADAS -->
+        <section class="page" id="page-seasons" hidden>
+            <div class="lb-period-row"><span class="muted small" id="season-ends"></span></div>
+            <div class="chips" id="season-chips" role="tablist"></div>
+            <div class="grid two">
+                <div class="card">
+                    <div class="card-head"><h3 id="season-board-title" data-i18n="se.board">Clasificación</h3></div>
+                    <div class="table-wrap"><table class="table" id="season-table">
+                        <thead><tr><th>#</th><th data-i18n="col.player">Jugador</th><th class="num" data-i18n="col.gained">Ganado</th></tr></thead>
+                        <tbody></tbody>
+                    </table></div>
+                </div>
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="se.hall">Salón de la fama</h3></div>
+                    <div id="season-hall"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENTOS -->
+        <section class="page" id="page-events" hidden>
+            <div id="event-live"></div>
+            <div class="card">
+                <div class="card-head"><h3 data-i18n="ev.history">Eventos anteriores</h3></div>
+                <div id="event-history"></div>
+            </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section class="page" id="page-admin" hidden>
+            <div id="admin-disabled" class="card notice" hidden></div>
+            <div id="admin-root" hidden>
+                <div class="grid two">
+                    <form class="card form" id="form-stat">
+                        <h3 data-i18n="ad.edit">Editar estadística</h3>
+                        <label><span data-i18n="ad.player">Jugador</span> <input name="player" required maxlength="16" pattern="[A-Za-z0-9_]{1,16}" list="player-names" autocomplete="off"></label>
+                        <div class="row">
+                            <label><span data-i18n="ad.stat">Estadística</span>
+                                <select name="stat">
+                                    <option value="player_kills" data-i18n="stat.player_kills">Asesinatos PvP</option>
+                                    <option value="deaths" data-i18n="stat.deaths">Muertes</option>
+                                    <option value="mob_kills" data-i18n="stat.mob_kills">Mobs</option>
+                                    <option value="hours_played" data-i18n="stat.hours_played">Horas jugadas</option>
+                                    <option value="blocks_broken" data-i18n="stat.blocks_broken">Bloques rotos</option>
+                                    <option value="blocks_placed" data-i18n="stat.blocks_placed">Bloques colocados</option>
+                                    <option value="ores_mined" data-i18n="stat.ores_mined">Minerales</option>
+                                    <option value="jumps" data-i18n="stat.jumps">Saltos</option>
+                                    <option value="distance_walked" data-i18n="stat.distance_walked">Distancia (km)</option>
+                                    <option value="fish_caught" data-i18n="stat.fish_caught">Peces pescados</option>
+                                    <option value="villager_trades" data-i18n="stat.villager_trades">Tratos con aldeanos</option>
+                                    <option value="damage_dealt" data-i18n="stat.damage_dealt">Daño causado</option>
+                                    <option value="damage_taken" data-i18n="stat.damage_taken">Daño recibido</option>
+                                </select>
+                            </label>
+                            <label><span data-i18n="ad.mode">Modo</span>
+                                <select name="mode"><option value="set" data-i18n="ad.mode.set">Fijar valor</option><option value="add" data-i18n="ad.mode.add">Sumar / restar</option></select>
+                            </label>
+                        </div>
+                        <label><span data-i18n="ad.value">Valor</span> <input name="value" type="number" step="any" required></label>
+                        <p class="muted small" id="stat-current"></p>
+                        <button class="btn btn-primary" type="submit" data-i18n="ad.apply">Aplicar</button>
+                    </form>
+                    <div class="stack">
+                        <form class="card form" id="form-broadcast">
+                            <h3 data-i18n="ad.broadcast">Anuncio al servidor</h3>
+                            <label><span data-i18n="ad.message">Mensaje (admite códigos &amp;)</span> <input name="message" required maxlength="256" placeholder="&amp;a¡Evento en 10 minutos!" data-i18n-ph="ad.message.ph"></label>
+                            <p class="mc-preview" id="broadcast-preview"></p>
+                            <button class="btn btn-primary" type="submit" data-i18n="ad.send">Enviar anuncio</button>
+                        </form>
+                        <div class="card form">
+                            <h3 data-i18n="ad.quick">Acciones rápidas</h3>
+                            <div class="btn-row">
+                                <button class="btn" type="button" data-admin="leaderboard/refresh" data-i18n="ad.refresh-lb">🔄 Recalcular ranking</button>
+                                <button class="btn" type="button" data-admin="save" data-i18n="ad.save">💾 Guardar todo</button>
+                                <button class="btn btn-warn" type="button" data-admin="reload" data-i18n="ad.reload">♻️ Recargar plugin</button>
+                                <button class="btn" type="button" id="export-csv" data-i18n="ad.csv">📥 Exportar CSV</button>
+                            </div>
+                        </div>
+                        <div class="card form" id="admin-periods" hidden>
+                            <h3 data-i18n="ad.periods">Tops semanal y mensual</h3>
+                            <p class="muted small" data-i18n="ad.periods.text">Cierra el periodo ahora: anuncia ganadores (juego y Discord), entrega premios y empieza uno nuevo.</p>
+                            <div class="btn-row">
+                                <button class="btn btn-warn" type="button" data-period-end="weekly" data-i18n="ad.period.weekly">🗓️ Cerrar top semanal</button>
+                                <button class="btn btn-warn" type="button" data-period-end="monthly" data-i18n="ad.period.monthly">📅 Cerrar top mensual</button>
+                            </div>
+                        </div>
+                        <div class="card form" id="admin-seasons" hidden>
+                            <h3 data-i18n="ad.season">Temporada</h3>
+                            <p class="muted small" id="admin-season-text"></p>
+                            <div class="btn-row">
+                                <button class="btn btn-warn" type="button" id="season-end-btn" data-i18n="ad.season.end">🏁 Cerrar temporada</button>
+                            </div>
+                        </div>
+                        <form class="card form" id="admin-events" hidden>
+                            <h3 data-i18n="ad.event">Evento temporal</h3>
+                            <p class="muted small" id="admin-event-status"></p>
+                            <div class="row">
+                                <label><span data-i18n="ad.event.what">Preset o estadística</span> <select name="what" id="event-what"></select></label>
+                                <label><span data-i18n="ad.event.duration">Duración</span> <input name="duration" maxlength="8" placeholder="1h"></label>
+                            </div>
+                            <label><span data-i18n="ad.event.name">Nombre (opcional)</span> <input name="name" maxlength="48"></label>
+                            <div class="btn-row">
+                                <button class="btn btn-primary" type="submit" id="event-start-btn" data-i18n="ad.event.start">▶️ Empezar</button>
+                                <button class="btn btn-warn" type="button" id="event-stop-btn" data-i18n="ad.event.stop">⏹️ Terminar</button>
+                                <button class="btn btn-ghost" type="button" id="event-cancel-btn" data-i18n="ad.event.cancel">Cancelar sin premios</button>
+                            </div>
+                        </form>
+                        <div class="card form" id="admin-discord" hidden>
+                            <div class="card-head"><h3 data-i18n="dc.title">Bot de Discord</h3></div>
+                            <div id="discord-status"></div>
+                        </div>
+                        <form class="card form danger" id="form-reset">
+                            <h3 data-i18n="ad.reset">Resetear jugador</h3>
+                            <label><span data-i18n="ad.player">Jugador</span> <input name="player" required maxlength="16" pattern="[A-Za-z0-9_]{1,16}" list="player-names" autocomplete="off"></label>
+                            <button class="btn btn-danger" type="submit" data-i18n="ad.reset.btn">Resetear estadísticas</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card" id="admin-console" hidden>
+                    <div class="card-head"><h3 data-i18n="con.title">Consola</h3>
+                        <span class="status-pill" id="console-status"><span class="dot"></span><span data-i18n="chat.disconnected">Desconectado</span></span></div>
+                    <div class="console-box" id="console-box" role="log"></div>
+                    <form class="console-form" id="console-form" autocomplete="off">
+                        <label class="sr-only" for="consoleInput" data-i18n="con.command">Comando</label>
+                        <input id="consoleInput" name="command" maxlength="256" placeholder="say Hola" data-i18n-ph="con.ph" spellcheck="false">
+                        <button class="btn btn-primary" type="submit" data-i18n="con.send">Ejecutar</button>
+                    </form>
+                    <p class="muted small" data-i18n="con.hint">Los comandos pasan por console.allow / console.deny y quedan en el registro.</p>
+                </div>
+                <div class="grid two">
+                    <div class="card" id="admin-alerts" hidden>
+                        <div class="card-head"><h3 data-i18n="al.title">Alertas</h3></div>
+                        <div id="alerts-body"></div>
+                    </div>
+                    <div class="stack">
+                        <div class="card form" id="admin-backups" hidden>
+                            <div class="card-head"><h3 data-i18n="bk.title">Copias de seguridad</h3>
+                                <button class="btn btn-sm" id="backup-run" type="button" data-i18n="bk.run">Crear copia ahora</button></div>
+                            <p class="muted small" id="backups-status"></p>
+                            <ul class="plain-list" id="backups-list"></ul>
+                        </div>
+                        <div class="card form" id="admin-updates" hidden>
+                            <div class="card-head"><h3 data-i18n="up.title">Actualizaciones</h3>
+                                <button class="btn btn-sm" id="updates-check" type="button" data-i18n="up.check">Comprobar</button></div>
+                            <div id="updates-status"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head"><h3 data-i18n="ad.log">Registro de acciones</h3><button class="btn btn-sm" id="admin-log-refresh" type="button" data-i18n="ad.log.refresh">Actualizar</button></div>
+                    <div class="table-wrap"><table class="table" id="admin-log">
+                        <thead><tr><th data-i18n="col.time">Hora</th><th data-i18n="col.action">Acción</th><th data-i18n="col.details">Detalles</th><th class="hide-sm" data-i18n="col.ip">IP</th></tr></thead>
+                        <tbody></tbody>
+                    </table></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Confirmación -->
+<dialog id="confirm-dialog" class="card dialog">
+    <form method="dialog">
+        <h3 id="confirm-title" data-i18n="dlg.sure">¿Seguro?</h3>
+        <p id="confirm-text" class="muted"></p>
+        <input id="confirm-input" hidden autocomplete="off">
+        <div class="btn-row end">
+            <button class="btn" value="cancel" data-i18n="dlg.cancel">Cancelar</button>
+            <button class="btn btn-danger" value="ok" id="confirm-ok" data-i18n="dlg.confirm">Confirmar</button>
+        </div>
+    </form>
+</dialog>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="i18n.js"></script>
+<script src="charts.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

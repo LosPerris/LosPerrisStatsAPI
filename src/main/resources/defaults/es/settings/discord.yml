@@ -1,0 +1,131 @@
+# LosPerrisStatsAPI · Discord (settings/discord.yml)
+# Dos módulos, cada uno en su sección: discord-webhook (avisos) y discord-bot (bot).
+# Cada sección se lee solo si su módulo está activo en config.yml. Aplicar cambios: /lpa reload
+# Guía: {{DOCS_URL}}/es/GUIA.md#discord-webhook
+
+# ┌─────────────────────────────────────────────────────────────────────
+# │ discord-webhook · Webhook de Discord
+# │ Qué hace:     Avisos de hitos y ganadores a Discord por webhook.
+# │ Comandos:     ninguno
+# │ Permisos:     ninguno
+# │ Variables:    {{DOCS_URL}}/es/variables/ (discord-webhook.md)
+# │ Activar:      config.yml → modules.discord-webhook: true  (o /lpa modules enable discord-webhook)
+# │ Guía:         {{DOCS_URL}}/es/GUIA.md#discord-webhook
+# │ Esta sección solo se lee si el módulo está activo.
+# └─────────────────────────────────────────────────────────────────────
+discord-webhook:
+  # La URL del Webhook de Discord
+  webhook-url: "PEGAR_TU_URL_AQUI"
+
+  # Nombre del remitente
+  username: "LosPerrisStats"
+
+  # Avatar del remitente
+  avatar-url: "https://i.ibb.co/d0c4ntd8/pato-minecraft.png"
+
+  # Color del embed (Hex o Entero). Default: Verde (estilo Minecraft) : #55FF55
+  embed-color: "#55FF55"
+
+  # Título del Embed de Discord cuando se desbloquea un hito
+  title: "¡Logro Desbloqueado!"
+
+# ┌─────────────────────────────────────────────────────────────────────
+# │ discord-bot · Bot de Discord
+# │ Qué hace:     Bot bidireccional: /stats, /top, /online, chat, vinculación y roles.
+# │ Comandos:     /lpa discord
+# │ Permisos:     ninguno
+# │ Variables:    {{DOCS_URL}}/es/variables/ (discord-bot.md)
+# │ Activar:      config.yml → modules.discord-bot: true  (o /lpa modules enable discord-bot)
+# │ Guía:         {{DOCS_URL}}/es/GUIA.md#discord-bot
+# │ Esta sección solo se lee si el módulo está activo.
+# └─────────────────────────────────────────────────────────────────────
+discord-bot:
+  # Guía completa: {{DOCS_URL}}/es/DISCORD_SETUP.md
+  # Distinto del módulo discord-webhook (solo envía avisos); ambos pueden convivir.
+
+  # auto: usa DiscordSRV si está instalado (su chat y su vinculación) y si no, el bot integrado.
+  # embedded: siempre el bot integrado. discordsrv: solo con DiscordSRV.
+  mode: "auto"
+
+  # Token del bot (portal de desarrolladores de Discord). También puede dejarlo vacío y usar la
+  # variable de entorno LPA_DISCORD_TOKEN. Nunca se escribe en el registro.
+  token: ""
+
+  # ID del servidor de Discord (clic derecho > Copiar ID con el modo desarrollador)
+  guild-id: ""
+
+  # Registrar slash (/panel, /stats, /top, /online, /staff y custom-commands)
+  commands: true
+
+  # Panel: /panel [canal]. Variables: {online} {max} {players} {tps} {uptime} {ip} {version}
+  # {refresh} {next_update} {bar} {pct} {status}
+  panel:
+    refresh-interval: "5m"
+    default-channel-id: ""
+    server-ip: ""
+    server-version: ""
+    embed:
+      title: "Servidor online"
+      description: "Panel de información del servidor."
+      color: "#57F287"
+      url: ""
+      thumbnail-url: ""
+      image-url: ""
+      author-name: "LosPerris"
+      author-icon-url: ""
+      footer-text: "LosPerrisStats • próxima actualización en {next_update}"
+      footer-icon-url: ""
+      timestamp: true
+    fields:
+      players: true
+      registered: true
+      tps: true
+      ip: true
+      version: true
+      uptime: true
+      online-list: true
+
+  # Slash propios (máx. 15). name único; action: reply | stats | online
+  custom-commands: []
+  # - name: ip
+  #   description: "Muestra la IP"
+  #   ephemeral: true
+  #   reply: "La IP es `{ip}`"
+
+  # Puente de chat juego <-> canal (solo bot integrado; con DiscordSRV lo hace DiscordSRV).
+  bridge:
+    enabled: false
+    channel-id: ""
+    to-discord-format: "**{player}**: {message}"
+    to-minecraft-format: "&9[Discord] &b{user}&7: &f{message}"
+    max-length: 256
+    join-quit: true
+
+  # Roles (solo con DiscordSRV + cuentas vinculadas allí). guild-id obligatorio.
+  roles:
+    linked: ""
+    milestones: {}
+    top: {}
+    sync-interval: "10m"
+
+  # /staff <comando>: solo usuarios con alguno de estos roles. Se ejecuta como consola.
+  staff:
+    role-ids: []
+    # Mismo formato que allow/deny de la sección console. Vacío = todos salvo los de deny
+    commands-allow:
+      - "list"
+      - "say *"
+      - "kick *"
+      - "lpa *"
+    commands-deny:
+      - "op *"
+      - "deop *"
+      - "stop"
+      - "restart"
+      - "lp *"
+      - "luckperms *"
+
+  # Solo para pruebas (servidores simulados). No los cambie.
+  api-url: "https://discord.com/api/v10"
+
+  gateway-url: "wss://gateway.discord.gg"

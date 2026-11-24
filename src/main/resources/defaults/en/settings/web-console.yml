@@ -1,0 +1,30 @@
+# LosPerrisStatsAPI · Web console (settings/web-console.yml)
+# Live console in the dashboard for administrators.
+# Read only when modules.web-console: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#web-console
+
+# Log lines kept in memory for whoever opens the console
+buffer-lines: 300
+# Simultaneous console connections
+max-clients: 3
+# Max lines per second sent to the browser (minimum 5; the rest is summarized in a notice)
+max-lines-per-second: 60
+# Hide IP addresses in the log
+hide-ips: true
+# Regular expressions whose text is replaced with *** (tokens, passwords...)
+redact:
+  - "(?i)(password|token|api-key|secret)\\S*\\s*[:=]\\s*\\S+"
+# Allowed commands, without "/". Patterns: "list" (exact), "say *" (with or without arguments),
+# "eco*" (wildcard). The "plugin:" prefix is ignored. Empty = everything except deny.
+allow: []
+# Commands that are ALWAYS blocked (take priority over allow). Same format as allow.
+deny:
+  - "stop"
+  - "restart"
+  - "reload *"
+  - "op *"
+  - "deop *"
+  - "lp *"
+  - "luckperms *"
+  - "pex *"
+  - "whitelist off"

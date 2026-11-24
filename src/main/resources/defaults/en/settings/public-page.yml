@@ -1,0 +1,23 @@
+# LosPerrisStatsAPI · Public page (settings/public-page.yml)
+# Read-only public page and API, no api-key needed.
+# Read only when modules.public-page: true in config.yml. Apply changes: /lpa reload
+# Guide: {{DOCS_URL}}/en/GUIDE.md#public-page
+
+# Title shown on the public page (empty = plugin name)
+title: ""
+# Requests per minute per IP (0 = no limit)
+rate-limit: 60
+# Access-Control-Allow-Origin for the public API
+cors-origin: "*"
+# Visible sections
+sections:
+  summary: true
+  leaderboards: true
+  players: true
+  profiles: true
+  periods: true
+  achievements: true
+  history: true
+  seasons: true
+  events: true
+  titles: true
